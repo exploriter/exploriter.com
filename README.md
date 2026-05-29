@@ -1,4 +1,4 @@
-# Exploriter Read-only EXP3 DB at exploriter.com
+# Read-only EXP3 DB at exploriter.com
 
 Public, read-only Astro site for the EXP3 knowledge base.
 
