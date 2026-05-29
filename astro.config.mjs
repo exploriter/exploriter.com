@@ -6,6 +6,7 @@ import cloudflare from "@astrojs/cloudflare";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+   output: "server",
    integrations: [mdx(), react()],
    adapter: cloudflare(),
    vite: {

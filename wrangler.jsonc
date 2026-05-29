@@ -9,5 +9,12 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "EXP3DB",
+			"database_name": "exp3",
+			"database_id": "8c2ee32b-653f-4f44-9f8f-c5f0808af683"
+		}
+	]
 }
