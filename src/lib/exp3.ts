@@ -8,6 +8,7 @@ export type FormationIntersectionSummary = {
    name: string;
    nameSingular: string;
    description: string;
+   essence: string;
 };
 
 export type EntrySummary = {
@@ -31,6 +32,7 @@ type FormationIntersectionSummaryRow = {
    name: string;
    name_singular: string;
    description: string;
+   essence: string;
 };
 
 type EntrySummaryRow = {
@@ -67,6 +69,7 @@ const mapFormationIntersectionSummary = (
    name: row.name,
    nameSingular: row.name_singular,
    description: row.description,
+   essence: row.essence,
 });
 
 const mapEntrySummary = (row: EntrySummaryRow): EntrySummary => ({
@@ -91,7 +94,7 @@ const mapEntryWithFormationIntersection = (
 export const listFormationIntersectionSummaries = async () => {
    const result = await env.EXP3DB.prepare(
       `
-      SELECT slug, slug_singular, name, name_singular, description
+      SELECT slug, slug_singular, name, name_singular, description, essence
       FROM formation_intersections
       ORDER BY sort_order ASC
       `
@@ -103,7 +106,7 @@ export const listFormationIntersectionSummaries = async () => {
 export const getFormationIntersectionSummaryBySlug = async (slug: string) => {
    const row = await env.EXP3DB.prepare(
       `
-      SELECT slug, slug_singular, name, name_singular, description
+      SELECT slug, slug_singular, name, name_singular, description, essence
       FROM formation_intersections
       WHERE slug = ?
       LIMIT 1
@@ -170,7 +173,8 @@ export const getEntryPageBySlugs = async (slugSingular: string, entrySlug: strin
          formation_intersections.slug_singular AS formation_intersection_slug_singular,
          formation_intersections.name AS formation_intersection_name,
          formation_intersections.name_singular AS formation_intersection_name_singular,
-         formation_intersections.description AS formation_intersection_description
+         formation_intersections.description AS formation_intersection_description,
+         formation_intersections.essence AS formation_intersection_essence
       FROM formation_intersections
       JOIN entries ON entries.formation_intersection_id = formation_intersections.id
       LEFT JOIN concept_entry_details ON concept_entry_details.entry_id = entries.id
@@ -194,6 +198,7 @@ export const getEntryPageBySlugs = async (slugSingular: string, entrySlug: strin
          name: row.formation_intersection_name,
          nameSingular: row.formation_intersection_name_singular,
          description: row.formation_intersection_description,
+         essence: row.formation_intersection_essence,
       },
    };
 };

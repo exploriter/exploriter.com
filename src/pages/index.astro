@@ -12,27 +12,28 @@ const sections = await listFormationIntersectionSummaries();
    <section class="mx-auto max-w-6xl px-4 pb-20">
       <div class="max-w-3xl">
          <p class="font-mono text-xs uppercase tracking-wider text-mist-900/50">EXP3 Knowledge Base</p>
-         <h1 class="mt-2 -ml-0.75 font-serif text-5xl leading-tight tracking-tight font-light">
+         <h1 class="mt-2 -ml-0.5 font-serif text-5xl leading-tight tracking-tight font-light">
             Nine lenses for <span class="italic">exploring</span> reality.
          </h1>
          <p class="mt-4 max-w-2xl text-muted-foreground">
-            These are the nine intersections of the vertical dimension (knowing, doing, belonging) and the horizontal dimension (opening, forming,
-            caring) that make up the 3x3 <abbr title="Personal Knowledge Management">PKM</abbr> system.
+            These are the nine intersections of the vertical dimension (<em>knowing</em>, <em>doing</em>, <em>belonging</em>) and the horizontal
+            dimension (<em>opening</em>, <em>forming</em>, <em>caring</em>) that make up the 3x3 <abbr title="Personal Knowledge Management">PKM</abbr
+            > system.
          </p>
       </div>
 
-      <nav
-         aria-label="EXP3 sections"
-         class="mt-12 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-1 lg:grid-cols-3 rounded-lg shadow-xs"
-      >
+      <nav aria-label="EXP3 sections" class="mt-12 grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3 rounded-lg shadow-xs">
          {
             sections.map((section) => (
                <a href={`/${section.slug}`} class="group bg-background p-6 transition hover:bg-background/70">
+                  <div class="font-mono text-xs uppercase tracking-wider text-mist-900/50 mb-1">{section.essence}</div>
                   <div class="flex items-center justify-between gap-4">
-                     <h2 class="font-serif text-2xl group-hover:underline group-hover:underline-offset-2">{section.name}</h2>
+                     <h2 class="-ml-0.5 font-serif text-3xl group-hover:underline group-hover:underline-offset-2 group-hover:decoration-1">
+                        {section.name}
+                     </h2>
                      <SectionIcon slug={section.slug} label={section.nameSingular} client:only="react" />
                   </div>
-                  <p class="mt-4 line-clamp-3 text-sm leading-6 text-muted-foreground">{section.description}</p>
+                  <p class="mt-4 line-clamp-3 text-sm text-muted-foreground">{section.description}</p>
                </a>
             ))
          }
