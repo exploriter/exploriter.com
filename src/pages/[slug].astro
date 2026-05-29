@@ -1,6 +1,7 @@
 ---
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import NotFoundPage from "@/components/NotFoundPage.astro";
+import { ConceptKindIcon } from "@/components/icons/section-icon";
 import { getFormationIntersectionSummaryBySlug, listEntrySummariesByFormationIntersectionSlug } from "@/lib/exp3";
 
 export const prerender = false;
@@ -43,10 +44,15 @@ const entries = slug && section ? await listEntrySummariesByFormationIntersectio
                   <ul class="divide-y divide-border">
                      {entries.map((entry) => (
                         <li>
-                           <a href={`/${section.slugSingular}/${entry.slug}`} class="block py-5 transition hover:bg-muted/50">
-                              <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-                                 <h3 class="font-serif text-2xl font-medium">{entry.title}</h3>
-                                 <span class="font-mono text-xs uppercase text-muted-foreground">
+                           <a href={`/${section.slugSingular}/${entry.slug}`} class="group block py-5 transition hover:bg-muted/50">
+                              <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                 <div class="flex items-center gap-2">
+                                    {section.slugSingular === "concept" && entry.conceptKind ? (
+                                       <ConceptKindIcon conceptKind={entry.conceptKind} client:only="react" />
+                                    ) : null}
+                                    <h3 class="font-serif text-2xl font-medium">{entry.title}</h3>
+                                 </div>
+                                 <span class="font-mono text-xs uppercase text-muted-foreground sm:pt-2">
                                     /{section.slugSingular}/{entry.slug}
                                  </span>
                               </div>

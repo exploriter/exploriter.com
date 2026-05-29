@@ -1,4 +1,5 @@
 ---
+import SectionIcon from "@/components/icons/section-icon";
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import { listFormationIntersectionSummaries } from "@/lib/exp3";
 
@@ -20,13 +21,16 @@ const sections = await listFormationIntersectionSummaries();
          </p>
       </div>
 
-      <nav aria-label="EXP3 sections" class="mt-12 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      <nav
+         aria-label="EXP3 sections"
+         class="mt-12 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-1 lg:grid-cols-3 rounded-lg shadow-xs"
+      >
          {
             sections.map((section) => (
-               <a href={`/${section.slug}`} class="group bg-background p-6 transition hover:bg-muted/70">
-                  <div class="flex items-baseline justify-between gap-4">
-                     <h2 class="font-serif text-2xl font-medium group-hover:underline group-hover:underline-offset-4">{section.name}</h2>
-                     <span class="font-mono text-xs uppercase text-muted-foreground">/{section.slug}</span>
+               <a href={`/${section.slug}`} class="group bg-background p-6 transition hover:bg-background/70">
+                  <div class="flex items-center justify-between gap-4">
+                     <h2 class="font-serif text-2xl group-hover:underline group-hover:underline-offset-2">{section.name}</h2>
+                     <SectionIcon slug={section.slug} label={section.nameSingular} client:only="react" />
                   </div>
                   <p class="mt-4 line-clamp-3 text-sm leading-6 text-muted-foreground">{section.description}</p>
                </a>
