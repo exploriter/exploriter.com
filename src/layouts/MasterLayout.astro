@@ -1,0 +1,21 @@
+---
+import "@/styles/global.css";
+import { Font } from "astro:assets";
+const { title, description } = Astro.props;
+---
+
+<html lang="en" class="antialiased">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width" />
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <Font cssVariable="--font-ibm-plex-mono" />
+      <Font cssVariable="--font-ibm-plex-sans" />
+      <Font cssVariable="--font-ibm-plex-serif" />
+   </head>
+   <body class="font-sans">
+      <div class="bg-[url(/images/noise.webp)] pointer-events-none -z-1 fixed inset-0 bg-size-[180px] bg-repeat opacity-3.5"></div>
+      <slot />
+   </body>
+</html>

@@ -1,0 +1,12 @@
+---
+import MasterLayout from "@/layouts/MasterLayout.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+const { title, description } = Astro.props;
+---
+
+<MasterLayout title={title} description={description}>
+   <SiteHeader />
+   <main>
+      <slot />
+   </main>
+</MasterLayout>

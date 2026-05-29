@@ -1,9 +1,15 @@
 {
    "extends": "astro/tsconfigs/strict",
    "include": [".astro/types.d.ts", "**/*", "./worker-configuration.d.ts"],
-   "exclude": ["dist"],
+   "exclude": ["dist", "node_modules", "build"],
    "compilerOptions": {
       "jsx": "react-jsx",
-      "jsxImportSource": "react"
+      "jsxImportSource": "react",
+      "paths": {
+         "@/*": ["./src/*"],
+      },
+      "plugins": [{
+         "name": "@astrojs/ts-plugin"
+      }]
    }
 }

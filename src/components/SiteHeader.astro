@@ -1,0 +1,33 @@
+---
+import { IdentificationCardIcon } from "@phosphor-icons/react/dist/ssr/IdentificationCard";
+import { BrowserIcon } from "@phosphor-icons/react/dist/ssr/Browser";
+---
+
+<header class="py-2.5 px-4 mb-12 border-b border-b-mist-200/70 bg-mist-100/33">
+   <div class="flex items-center justify-between">
+      <h1 class="font-serif lowercase text-lg">
+         <a href="/" class="flex items-center gap-1 group">
+            <div class="tracking-tight group-hover:underline underline-offset-2">
+               Explo<span class="font-sans font-light opacity-70">(</span>r<span class="font-sans font-light opacity-70">|</span>it<span
+                  class="font-sans font-light opacity-70">)</span
+               >er.
+            </div>
+            <div class="italic opacity-70 hidden sm:block">Truth-teller; reputable fabulist.</div>
+         </a>
+      </h1>
+      <nav class="flex items-center gap-2 sm:gap-4">
+         <a href="/story/jason" aria-label="About the Author" class="flex items-center gap-1 hover:underline underline-offset-2">
+            <IdentificationCardIcon weight="thin" className="size-5.5" />
+            <span class="text-xs uppercase hidden sm:inline"
+               ><span class="font-mono opacity-70">About:</span> <span class="font-medium">Author</span></span
+            >
+         </a>
+         <a href="/project/exploriter" aria-label="About the Site" class="flex items-center gap-1 hover:underline underline-offset-2">
+            <BrowserIcon weight="thin" className="size-5.5" />
+            <span class="text-xs uppercase hidden sm:inline"
+               ><span class="font-mono opacity-70">About:</span> <span class="font-medium">Site</span></span
+            >
+         </a>
+      </nav>
+   </div>
+</header>

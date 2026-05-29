@@ -1,7 +1,10 @@
 ---
-import MainLayout from "../layouts/MainLayout.astro";
+import { TooltipExample } from "@/components/TooltipExample";
+import HeaderLayout from "@/layouts/HeaderLayout.astro";
 ---
 
-<MainLayout title="Home Page">
-   <h1 class="text-3xl">Astro</h1>
-</MainLayout>
+<HeaderLayout title="Exploriter — 3x3 Knowledge Base" description="A metaphysical and philosophical knowledge base project by Jason Hunter Watson.">
+   <h1 class="text-3xl">
+      <TooltipExample client:idle />
+   </h1>
+</HeaderLayout>
