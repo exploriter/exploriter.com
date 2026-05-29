@@ -44,7 +44,7 @@ const EntryContent = entry && slugSingular && entrySlug ? await loadEntryContent
                   {section.slugSingular === "concept" && entry.conceptKind ? (
                      <ConceptKindIcon conceptKind={entry.conceptKind} client:only="react" />
                   ) : null}
-                  <h1 class="-ml-0.75 font-serif text-5xl leading-tight sm:text-6xl">{entry.title}</h1>
+                  <h1 class="-ml-0.5 font-serif text-5xl leading-tight">{entry.title}</h1>
                </div>
                <p class="mt-5 font-serif text-xl leading-8 text-muted-foreground">{entry.description}</p>
             </header>
