@@ -1,10 +1,37 @@
 ---
-import { TooltipExample } from "@/components/TooltipExample";
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
+import { listFormationIntersectionSummaries } from "@/lib/exp3";
+
+export const prerender = false;
+
+const sections = await listFormationIntersectionSummaries();
 ---
 
 <HeaderLayout title="Exploriter — 3x3 Knowledge Base" description="A metaphysical and philosophical knowledge base project by Jason Hunter Watson.">
-   <h1 class="text-3xl">
-      <TooltipExample client:idle />
-   </h1>
+   <section class="mx-auto max-w-6xl px-4 pb-20">
+      <div class="max-w-3xl">
+         <p class="font-mono text-xs uppercase tracking-wider text-mist-900/50">EXP3 Knowledge Base</p>
+         <h1 class="mt-2 -ml-0.75 font-serif text-5xl leading-tight tracking-tight font-light">
+            Nine lenses for <span class="italic">exploring</span> reality.
+         </h1>
+         <p class="mt-4 max-w-2xl text-muted-foreground">
+            These are the nine intersections of the vertical dimension (knowing, doing, belonging) and the horizontal dimension (opening, forming,
+            caring) that make up the 3x3 <abbr title="Personal Knowledge Management">PKM</abbr> system.
+         </p>
+      </div>
+
+      <nav aria-label="EXP3 sections" class="mt-12 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+         {
+            sections.map((section) => (
+               <a href={`/${section.slug}`} class="group bg-background p-6 transition hover:bg-muted/70">
+                  <div class="flex items-baseline justify-between gap-4">
+                     <h2 class="font-serif text-2xl font-medium group-hover:underline group-hover:underline-offset-4">{section.name}</h2>
+                     <span class="font-mono text-xs uppercase text-muted-foreground">/{section.slug}</span>
+                  </div>
+                  <p class="mt-4 line-clamp-3 text-sm leading-6 text-muted-foreground">{section.description}</p>
+               </a>
+            ))
+         }
+      </nav>
+   </section>
 </HeaderLayout>

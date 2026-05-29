@@ -132,3 +132,46 @@
     @apply font-sans;
    }
 }
+
+@layer components {
+   .entry-prose {
+      @apply text-base leading-7 sm:text-lg sm:leading-8 text-foreground;
+   }
+
+   .entry-prose p em,
+   .entry-prose ul em,
+   .entry-prose ol em {
+      @apply font-serif;
+   }
+
+   .entry-prose p strong,
+   .entry-prose ul strong,
+   .entry-prose ol strong {
+      @apply font-semibold;
+   }
+
+   .entry-prose h2 {
+      @apply mt-12 -ml-0.75 font-serif text-3xl font-medium;
+   }
+
+   .entry-prose p {
+      @apply mt-6;
+   }
+
+   .entry-prose ul,
+   .entry-prose ol {
+      @apply mt-6 list-outside pl-6;
+   }
+
+   .entry-prose ul {
+      @apply list-disc;
+   }
+
+   .entry-prose ol {
+      @apply list-decimal;
+   }
+
+   .entry-prose li {
+      @apply mt-2;
+   }
+}

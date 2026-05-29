@@ -1,0 +1,10 @@
+---
+import NotFoundPage from "@/components/NotFoundPage.astro";
+import HeaderLayout from "@/layouts/HeaderLayout.astro";
+
+Astro.response.status = 404;
+---
+
+<HeaderLayout title="Page Not Found — Exploriter" description="The requested page could not be found.">
+   <NotFoundPage path={Astro.url.pathname} />
+</HeaderLayout>
