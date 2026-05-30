@@ -3,7 +3,7 @@ import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
 import NotFoundPage from "@/components/NotFoundPage.astro";
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
-import { getFormationIntersectionSummaryBySlug, listEntrySummariesByFormationIntersectionSlug } from "@/lib/exp3";
+import { getFormationIntersectionSummaryBySlug, listAnalogSummariesByFormationIntersectionSlug, listEntrySummariesByFormationIntersectionSlug } from "@/lib/exp3";
 
 export const prerender = false;
 
@@ -16,6 +16,7 @@ if (!section) {
 }
 
 const entries = slug && section ? await listEntrySummariesByFormationIntersectionSlug(slug) : [];
+const analogs = slug && section ? await listAnalogSummariesByFormationIntersectionSlug(slug) : [];
 ---
 
 <HeaderLayout
@@ -34,6 +35,14 @@ const entries = slug && section ? await listEntrySummariesByFormationIntersectio
                   <SectionIcon slug={section.slug} label={section.nameSingular} className="hidden size-8 sm:block" client:only="react" />
                </div>
                <p class="mt-5 text-base leading-7 text-muted-foreground">{section.description}</p>
+               {
+                  analogs.length > 0 ? (
+                     <div class="mt-6">
+                        <h2 class="font-mono text-xs uppercase text-muted-foreground">Analogs</h2>
+                        <p class="mt-2 text-sm leading-6 text-muted-foreground">{analogs.map((analog) => analog.name).join(", ")}</p>
+                     </div>
+                  ) : null
+               }
             </div>
 
             <section class="mt-12">

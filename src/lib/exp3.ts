@@ -13,6 +13,11 @@ export type FormationIntersectionSummary = {
 
 export type FormationIntersectionPageSummary = Pick<FormationIntersectionSummary, "slug" | "slugSingular" | "name" | "nameSingular" | "description">;
 
+export type AnalogSummary = {
+   slug: string;
+   name: string;
+};
+
 export type EntrySummary = {
    slug: string;
    title: string;
@@ -43,6 +48,11 @@ type FormationIntersectionPageSummaryRow = {
    name: string;
    name_singular: string;
    description: string;
+};
+
+type AnalogSummaryRow = {
+   slug: string;
+   name: string;
 };
 
 type EntrySummaryRow = {
@@ -92,6 +102,11 @@ const mapFormationIntersectionPageSummary = (row: FormationIntersectionPageSumma
    description: row.description,
 });
 
+const mapAnalogSummary = (row: AnalogSummaryRow): AnalogSummary => ({
+   slug: row.slug,
+   name: row.name,
+});
+
 const mapEntryWithFormationIntersection = (row: EntryWithFormationIntersectionRow): EntryWithFormationIntersection => ({
    ...mapEntrySummary(row),
    formationIntersection: {
@@ -126,6 +141,25 @@ export const getFormationIntersectionSummaryBySlug = async (slug: string) => {
       .first<FormationIntersectionPageSummaryRow>();
 
    return row ? mapFormationIntersectionPageSummary(row) : null;
+};
+
+export const listAnalogSummariesByFormationIntersectionSlug = async (slug: string) => {
+   const result = await env.EXP3DB.prepare(
+      `
+      SELECT
+         analogs.slug,
+         analogs.name
+      FROM formation_intersections
+      JOIN analog_formation_intersections ON analog_formation_intersections.formation_intersection_id = formation_intersections.id
+      JOIN analogs ON analogs.id = analog_formation_intersections.analog_id
+      WHERE formation_intersections.slug = ?
+      ORDER BY analogs.name COLLATE NOCASE ASC, analogs.slug ASC
+      `
+   )
+      .bind(slug)
+      .all<AnalogSummaryRow>();
+
+   return (result.results ?? []).map(mapAnalogSummary);
 };
 
 export const listEntrySummariesByFormationIntersectionSlug = async (slug: string) => {
