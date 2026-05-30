@@ -48,6 +48,17 @@
    --radius-2xl: calc(var(--radius) * 1.8);
    --radius-3xl: calc(var(--radius) * 2.2);
    --radius-4xl: calc(var(--radius) * 2.6);
+   --animate-blink: blink 0.7s step-end infinite;
+
+   @keyframes blink {
+      0%,
+      100% {
+         opacity: 1;
+      }
+      50% {
+         opacity: 0;
+      }
+   }
 }
 
 :root {
@@ -139,6 +150,11 @@
 @layer components {
    .entry-prose {
       @apply text-base leading-7 sm:text-lg sm:leading-8 text-foreground;
+   }
+
+   .typewriter-cursor::after {
+      content: "_";
+      animation: var(--animate-blink);
    }
 
    .entry-prose p em,

@@ -3,7 +3,11 @@ import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
 import NotFoundPage from "@/components/NotFoundPage.astro";
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
-import { getFormationIntersectionSummaryBySlug, listAnalogSummariesByFormationIntersectionSlug, listEntrySummariesByFormationIntersectionSlug } from "@/lib/exp3";
+import {
+   getFormationIntersectionSummaryBySlug,
+   listAnalogSummariesByFormationIntersectionSlug,
+   listEntrySummariesByFormationIntersectionSlug,
+} from "@/lib/exp3";
 
 export const prerender = false;
 
@@ -30,19 +34,24 @@ const analogs = slug && section ? await listAnalogSummariesByFormationIntersecti
 
             <div class="mt-8">
                <div class="flex items-center gap-4">
-                  <h1 class="min-w-0 shrink-0 -ml-0.5 font-serif text-5xl leading-tight">{section.name}</h1>
+                  <h1 class="min-w-0 shrink-0 -ml-0.5 font-serif text-5xl leading-tight flex items-center gap-2">
+                     <span>{section.name}</span>
+                     {analogs.length > 0 ? (
+                        <span class="lowercase text-emerald-600/60 font-extralight font-mono tracking-tight hidden lg:inline-flex">
+                           /<span id="typewriter" class="typewriter-cursor" data-analogs={JSON.stringify(analogs.map((analog) => analog.name))} />
+                        </span>
+                     ) : null}
+                  </h1>
                   <span class="hidden h-px min-w-0 flex-1 border-t border-dashed border-border sm:block" aria-hidden="true" />
                   <SectionIcon slug={section.slug} label={section.nameSingular} className="hidden size-8 sm:block" client:only="react" />
                </div>
                <p class="mt-5 text-base leading-7 text-muted-foreground">{section.description}</p>
-               {
-                  analogs.length > 0 ? (
-                     <div class="mt-6">
-                        <h2 class="font-mono text-xs uppercase text-muted-foreground">Analogs</h2>
-                        <p class="mt-2 text-sm leading-6 text-muted-foreground">{analogs.map((analog) => analog.name).join(", ")}</p>
-                     </div>
-                  ) : null
-               }
+               {analogs.length > 0 ? (
+                  <div class="mt-6">
+                     <h2 class="font-mono text-xs uppercase text-muted-foreground">Analogs</h2>
+                     <p class="mt-2 text-sm leading-6 text-muted-foreground">{analogs.map((analog) => analog.name).join(", ")}</p>
+                  </div>
+               ) : null}
             </div>
 
             <section class="mt-12">
@@ -87,3 +96,45 @@ const analogs = slug && section ? await listAnalogSummariesByFormationIntersecti
       )
    }
 </HeaderLayout>
+
+<script>
+   (() => {
+      const el = document.getElementById("typewriter");
+      if (!(el instanceof HTMLElement)) return;
+
+      const analogs = JSON.parse(el.dataset.analogs ?? "[]");
+      if (!Array.isArray(analogs) || analogs.length === 0) return;
+
+      let i = 0;
+      let j = 0;
+      let deleting = false;
+
+      const type = () => {
+         const analog = String(analogs[i] ?? "");
+
+         if (deleting) {
+            j--;
+            el.textContent = analog.substring(0, j);
+
+            if (j === 0) {
+               deleting = false;
+               i = (i + 1) % analogs.length;
+            }
+         } else {
+            j++;
+            el.textContent = analog.substring(0, j);
+
+            if (j === analog.length) {
+               return setTimeout(() => {
+                  deleting = true;
+                  type();
+               }, 2500);
+            }
+         }
+
+         setTimeout(type, 80);
+      };
+
+      type();
+   })();
+</script>
