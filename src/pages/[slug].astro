@@ -1,7 +1,8 @@
 ---
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
+import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
 import NotFoundPage from "@/components/NotFoundPage.astro";
-import { ConceptKindIcon } from "@/components/icons/section-icon";
+import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
 import { getFormationIntersectionSummaryBySlug, listEntrySummariesByFormationIntersectionSlug } from "@/lib/exp3";
 
 export const prerender = false;
@@ -23,20 +24,21 @@ const entries = slug && section ? await listEntrySummariesByFormationIntersectio
 >
    {
       section ? (
-         <section class="mx-auto max-w-5xl px-5 pb-20">
-            <a href="/" class="font-mono text-xs uppercase text-muted-foreground hover:text-foreground hover:underline hover:underline-offset-4">
-               EXP3
-            </a>
+         <section class="mx-auto max-w-6xl px-4 pb-20">
+            <BreadcrumbTrail items={[{ label: section.name }]} />
 
-            <div class="mt-8 max-w-3xl">
-               <p class="font-mono text-xs uppercase tracking-wider text-muted-foreground">/{section.slug}</p>
-               <h1 class="mt-4 -ml-0.75 font-serif text-5xl font-medium leading-tight sm:text-6xl">{section.name}</h1>
+            <div class="mt-8">
+               <div class="flex items-center gap-4">
+                  <h1 class="min-w-0 shrink-0 -ml-0.5 font-serif text-5xl leading-tight">{section.name}</h1>
+                  <span class="hidden h-px min-w-0 flex-1 border-t border-dashed border-border sm:block" aria-hidden="true" />
+                  <SectionIcon slug={section.slug} label={section.nameSingular} className="hidden size-8 sm:block" client:only="react" />
+               </div>
                <p class="mt-5 text-base leading-7 text-muted-foreground">{section.description}</p>
             </div>
 
             <section class="mt-12">
                <div class="flex items-end justify-between gap-4 border-b border-border pb-3">
-                  <h2 class="font-serif text-2xl font-medium">Entries</h2>
+                  <h2 class="font-mono text-xs uppercase text-muted-foreground">Entries</h2>
                   <p class="font-mono text-xs uppercase text-muted-foreground">{entries.length} total</p>
                </div>
 
@@ -44,17 +46,22 @@ const entries = slug && section ? await listEntrySummariesByFormationIntersectio
                   <ul class="divide-y divide-border">
                      {entries.map((entry) => (
                         <li>
-                           <a href={`/${section.slugSingular}/${entry.slug}`} class="group block py-5 transition hover:bg-muted/50">
-                              <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                 <div class="flex items-center gap-2">
-                                    {section.slugSingular === "concept" && entry.conceptKind ? (
-                                       <ConceptKindIcon conceptKind={entry.conceptKind} client:only="react" />
-                                    ) : null}
-                                    <h3 class="font-serif text-2xl font-medium">{entry.title}</h3>
-                                 </div>
-                                 <span class="font-mono text-xs uppercase text-muted-foreground sm:pt-2">
-                                    /{section.slugSingular}/{entry.slug}
-                                 </span>
+                           <a
+                              href={`/${section.slugSingular}/${entry.slug}`}
+                              class="group -mx-3 block rounded-md px-3 py-5 transition hover:bg-muted/50 sm:-mx-4 sm:px-4"
+                           >
+                              <div class="flex items-center">
+                                 {section.slugSingular === "concept" && entry.conceptKind ? (
+                                    <ConceptKindIcon
+                                       className="size-5 hidden sm:block mr-2"
+                                       conceptKind={entry.conceptKind}
+                                       weight="regular"
+                                       client:only="react"
+                                    />
+                                 ) : null}
+                                 <h3 class="font-serif text-xl group-hover:underline group-hover:decoration-1 group-hover:underline-offset-2">
+                                    {entry.title}
+                                 </h3>
                               </div>
                               <p class="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{entry.description}</p>
                            </a>

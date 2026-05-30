@@ -1,0 +1,57 @@
+---
+import { HouseLineIcon } from "@phosphor-icons/react/dist/ssr/HouseLine";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+
+type BreadcrumbTrailItem = {
+   label: string;
+   href?: string;
+};
+
+interface Props {
+   items?: BreadcrumbTrailItem[];
+}
+
+const { items = [] } = Astro.props;
+const hasTrailingContent = Astro.slots.has("default");
+---
+
+<Breadcrumb className="w-full font-mono text-xs uppercase">
+   <BreadcrumbList className="flex-nowrap gap-2 text-xs uppercase whitespace-nowrap">
+      <BreadcrumbItem className="shrink-0">
+         <BreadcrumbLink href="/" className="inline-flex items-center gap-1.5 hover:underline hover:underline-offset-4">
+            <HouseLineIcon weight="light" className="size-3.5" aria-hidden="true" />
+            <span>Home</span>
+         </BreadcrumbLink>
+      </BreadcrumbItem>
+
+      {
+         items.map((item, index) => {
+            const isCurrentPage = index === items.length - 1;
+
+            return (
+               <>
+                  <BreadcrumbSeparator className="shrink-0" />
+                  <BreadcrumbItem className={isCurrentPage ? "min-w-0 flex-1 overflow-hidden sm:flex-none" : "shrink-0"}>
+                     {item.href && !isCurrentPage ? (
+                        <BreadcrumbLink href={item.href} className="whitespace-nowrap hover:underline hover:underline-offset-4">
+                           {item.label}
+                        </BreadcrumbLink>
+                     ) : (
+                        <BreadcrumbPage className="block truncate">{item.label}</BreadcrumbPage>
+                     )}
+                  </BreadcrumbItem>
+               </>
+            );
+         })
+      }
+
+      {
+         hasTrailingContent ? (
+            <BreadcrumbItem className="hidden min-w-4 flex-1 items-center gap-2 sm:inline-flex">
+               <span class="h-px min-w-0 flex-1 border-t border-dashed border-border" aria-hidden="true" />
+               <slot />
+            </BreadcrumbItem>
+         ) : null
+      }
+   </BreadcrumbList>
+</Breadcrumb>
