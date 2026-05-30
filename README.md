@@ -194,6 +194,64 @@ http://localhost:4321/concept/beauty
 
 Because `EXP3DB` uses `remote: true`, local dev needs Cloudflare/Wrangler auth and an internet connection.
 
+### Cloudflare Auth Troubleshooting
+
+If `pnpm dev` fails while establishing the remote connection, the problem is usually Wrangler auth rather than Astro or D1 query code.
+
+Common error lines:
+
+```text
+Failed to start the remote proxy session
+A request to the Cloudflare API (.../workers/subdomain/edge-preview) failed
+Authentication error [code: 10000]
+Invalid access token [code: 9109]
+D1_ERROR: Failed to parse body as JSON, got: error code: 1031
+```
+
+The D1 error can be a downstream symptom. The page queries `EXP3DB`, but the remote Cloudflare runtime cannot start because Wrangler's stored token is invalid or expired.
+
+First check auth:
+
+```sh
+pnpm exec wrangler whoami
+```
+
+If that fails with an auth or token error, refresh the Wrangler login:
+
+```sh
+pnpm exec wrangler logout
+pnpm exec wrangler login
+pnpm exec wrangler whoami
+pnpm dev
+```
+
+If the browser login succeeds, `wrangler whoami` should show the `Exploriter` account:
+
+```text
+Account Name: Exploriter
+Account ID: d672df144a92186b38db198965e2022b
+```
+
+Also check that the shell is not overriding Wrangler OAuth with a stale API token:
+
+```sh
+printenv CLOUDFLARE_API_TOKEN
+```
+
+If a stale token is present, unset it or replace it before running dev:
+
+```sh
+unset CLOUDFLARE_API_TOKEN
+pnpm exec wrangler login
+pnpm dev
+```
+
+To fail fast before starting Astro, use:
+
+```sh
+pnpm exec wrangler whoami && pnpm dev
+```
+
 ## Checks
 
 Run Astro diagnostics:
