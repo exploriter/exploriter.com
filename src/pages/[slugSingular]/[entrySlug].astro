@@ -41,14 +41,13 @@ const EntryContent = entry && slugSingular && entrySlug ? await loadEntryContent
             </header>
 
             {EntryContent ? (
-               <div class="entry-prose mt-14 max-w-none">
+               <div class="entry-prose mt-10 border-t border-border">
                   <EntryContent />
                </div>
             ) : (
-               <section class="mt-14 border-y border-border py-10">
-                  <p class="font-mono text-xs uppercase tracking-wider text-muted-foreground">Coming Soon</p>
-                  <p class="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-                     This entry exists in the EXP3 database. A full page has not been published yet.
+               <section class="entry-prose mt-10 border-t border-border">
+                  <p class="text-sm border border-notice/33 bg-notice/5 px-4 py-3 rounded text-notice">
+                     This entry exists in the <code>EXP3</code> database. A full page is pending migration/publication. Check back soon!
                   </p>
                </section>
             )}

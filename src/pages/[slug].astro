@@ -63,7 +63,7 @@ const entries = slug && section ? await listEntrySummariesByFormationIntersectio
                                     {entry.title}
                                  </h3>
                               </div>
-                              <p class="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{entry.description}</p>
+                              {entry.description ? <p class="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{entry.description}</p> : null}
                            </a>
                         </li>
                      ))}

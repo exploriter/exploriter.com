@@ -26,6 +26,7 @@
    --color-input: var(--input);
    --color-border: var(--border);
    --color-destructive: var(--destructive);
+   --color-notice: var(--notice);
    --color-accent-foreground: var(--accent-foreground);
    --color-accent: var(--accent);
    --color-muted-foreground: var(--muted-foreground);
@@ -65,6 +66,7 @@
    --accent: oklch(0.963 0.002 197.1);
    --accent-foreground: oklch(0.218 0.008 223.9);
    --destructive: oklch(0.577 0.245 27.325);
+   --notice: oklch(45.688% 0.11771 246.087);
    --border: oklch(0.925 0.005 214.3);
    --input: oklch(0.925 0.005 214.3);
    --ring: oklch(0.723 0.014 214.4);
@@ -119,17 +121,18 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+   * {
+      @apply border-border outline-ring/50;
    }
-  body {
-    @apply bg-background text-foreground;
+   body {
+      @apply bg-background text-foreground;
    }
-  button:not(:disabled), [role="button"]:not(:disabled) {
-    cursor: pointer;
+   button:not(:disabled),
+   [role="button"]:not(:disabled) {
+      cursor: pointer;
    }
-  html {
-    @apply font-sans;
+   html {
+      @apply font-sans;
    }
 }
 
@@ -173,5 +176,17 @@
 
    .entry-prose li {
       @apply mt-2;
+   }
+
+   .entry-prose a {
+      @apply underline underline-offset-2 decoration-1 hover:text-emerald-700;
+   }
+
+   .entry-prose hr {
+      @apply my-12 border-t border-border;
+   }
+
+   code {
+      @apply font-mono bg-mist-300/50 text-mist-900 px-1 py-0.5 rounded-xs not-italic;
    }
 }

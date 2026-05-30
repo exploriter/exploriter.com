@@ -11,19 +11,19 @@ const entries = await listAllEntrySummaries();
 ---
 
 <HeaderLayout title="All Entries — Exploriter" description="All EXP3 knowledge base entries listed alphabetically.">
-   <section class="mx-auto max-w-5xl px-5 pb-20">
+   <section class="mx-auto max-w-6xl px-4 pb-20">
       <BreadcrumbTrail items={[{ label: "All Entries" }]} />
 
-      <div class="mt-8 max-w-3xl">
-         <h1 class="-ml-0.75 font-serif text-5xl font-medium leading-tight sm:text-6xl">All Entries</h1>
+      <div class="mt-8">
+         <h1 class="min-w-0 shrink-0 -ml-0.5 font-serif text-5xl leading-tight">All Entries</h1>
          <p class="mt-5 text-base leading-7 text-muted-foreground">
-            Every published EXP3 entry, listed alphabetically across all nine formation intersections.
+            Every published <code>EXP3</code> entry, listed alphabetically across all nine formation intersections.
          </p>
       </div>
 
       <section class="mt-12">
          <div class="flex items-end justify-between gap-4 border-b border-border pb-3">
-            <h2 class="font-serif text-2xl font-medium">Entries</h2>
+            <h2 class="font-mono text-xs uppercase text-muted-foreground">Entries</h2>
             <p class="font-mono text-xs uppercase text-muted-foreground">{entries.length} total</p>
          </div>
 
@@ -34,16 +34,31 @@ const entries = await listAllEntrySummaries();
                      const section = entry.formationIntersection;
                      return (
                         <li>
-                           <a href={`/${section.slugSingular}/${entry.slug}`} class="group block py-5 transition hover:bg-muted/50">
-                              <div class="flex items-center gap-2">
+                           <a
+                              href={`/${section.slugSingular}/${entry.slug}`}
+                              class="group -mx-3 block rounded-md px-3 py-5 transition hover:bg-muted/50 sm:-mx-4 sm:px-4"
+                           >
+                              <div class="flex items-center">
                                  {section.slugSingular === "concept" && entry.conceptKind ? (
-                                    <ConceptKindIcon conceptKind={entry.conceptKind} client:only="react" />
+                                    <ConceptKindIcon
+                                       className="mr-2 hidden size-5 sm:block"
+                                       conceptKind={entry.conceptKind}
+                                       weight="regular"
+                                       client:only="react"
+                                    />
                                  ) : (
-                                    <SectionIcon slug={section.slug} label={section.nameSingular} client:only="react" />
+                                    <SectionIcon
+                                       slug={section.slug}
+                                       label={section.nameSingular}
+                                       className="mr-2 hidden size-5 sm:block"
+                                       client:only="react"
+                                    />
                                  )}
-                                 <h3 class="font-serif text-2xl font-medium">{entry.title}</h3>
+                                 <h3 class="font-serif text-xl group-hover:underline group-hover:decoration-1 group-hover:underline-offset-2">
+                                    {entry.title}
+                                 </h3>
                               </div>
-                              <p class="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{entry.description}</p>
+                              {entry.description ? <p class="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{entry.description}</p> : null}
                            </a>
                         </li>
                      );
