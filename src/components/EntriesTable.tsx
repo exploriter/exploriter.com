@@ -16,6 +16,7 @@ type EntryTableRow = EntrySummary & {
    href: string;
    iconSort: string;
    formationIntersection?: EntryWithFormationIntersection["formationIntersection"];
+   searchScore: number;
 };
 
 const conceptKindLabels = {
@@ -102,6 +103,11 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
    const [query, setQuery] = React.useState("");
    const [sorting, setSorting] = React.useState<SortingState>([{ id: "title", desc: false }]);
    const showIconColumn = sectionSlugSingular === "concept" || entries.some(hasFormationIntersection);
+   const normalizedQuery = query.trim().toLowerCase();
+   const effectiveSorting = React.useMemo<SortingState>(
+      () => (normalizedQuery ? [{ id: "searchScore", desc: true }, ...sorting] : sorting),
+      [normalizedQuery, sorting]
+   );
 
    const toggleTitleSort = React.useCallback(() => {
       setSorting((currentSorting) => {
@@ -124,25 +130,23 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
    }, []);
 
    const filteredEntries = React.useMemo(() => {
-      const normalizedQuery = query.trim().toLowerCase();
-
       return entries
          .map((entry) => ({ entry, score: getSearchScore(entry, normalizedQuery) }))
          .filter(({ score }) => !normalizedQuery || score > 0)
-         .sort((a, b) => {
-            if (!normalizedQuery) return 0;
-            if (b.score !== a.score) return b.score - a.score;
-            return a.entry.title.localeCompare(b.entry.title);
-         })
-         .map(({ entry }) => ({
+         .map(({ entry, score }) => ({
             ...entry,
             href: getEntryHref(entry, sectionSlugSingular),
             iconSort: getIconSort(entry),
+            searchScore: score,
          }));
-   }, [entries, query, sectionSlugSingular]);
+   }, [entries, normalizedQuery, sectionSlugSingular]);
 
    const columns = React.useMemo<ColumnDef<EntryTableRow>[]>(() => {
       const sharedColumns: ColumnDef<EntryTableRow>[] = [
+         {
+            accessorKey: "searchScore",
+            enableHiding: true,
+         },
          {
             accessorKey: "title",
             header: ({ column }) => <SortHeader label="Title" onClick={toggleTitleSort} sortDirection={column.getIsSorted()} />,
@@ -185,7 +189,10 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
       getSortedRowModel: getSortedRowModel(),
       onSortingChange: setSorting,
       state: {
-         sorting,
+         columnVisibility: {
+            searchScore: false,
+         },
+         sorting: effectiveSorting,
       },
    });
 
@@ -251,7 +258,7 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
                   ))
                ) : (
                   <TableRow>
-                     <TableCell className="py-6 leading-6 text-muted-foreground" colSpan={columns.length}>
+                     <TableCell className="py-6 leading-6 text-muted-foreground" colSpan={table.getVisibleLeafColumns().length}>
                         No entries match your search.
                      </TableCell>
                   </TableRow>
