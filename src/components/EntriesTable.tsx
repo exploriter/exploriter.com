@@ -1,11 +1,21 @@
 import * as React from "react";
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
-import { CaretDownIcon, CaretUpDownIcon, CaretUpIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
+import {
+   CaretDownIcon,
+   CaretUpDownIcon,
+   CaretUpIcon,
+   GearFineIcon,
+   MagnifyingGlassIcon,
+   SealCheckIcon,
+   SkullIcon,
+   XIcon,
+} from "@phosphor-icons/react";
 
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { ConceptKind, EntrySummary, EntryWithFormationIntersection } from "@/lib/exp3";
+import { cn } from "@/lib/css";
+import type { ConceptKind, EntrySummary, EntryWithFormationIntersection, ProjectStatus } from "@/lib/exp3";
 
 type EntriesTableProps = {
    entries: Array<EntrySummary | EntryWithFormationIntersection>;
@@ -16,6 +26,7 @@ type EntryTableRow = EntrySummary & {
    href: string;
    iconSort: string;
    formationIntersection?: EntryWithFormationIntersection["formationIntersection"];
+   projectDobSort: number | null;
    searchScore: number;
 };
 
@@ -65,6 +76,60 @@ const getTypeSortPrimaryValue = (entry: EntryTableRow) => entry.formationInterse
 
 const getTypeSortSecondaryValue = (entry: EntryTableRow) => (entry.conceptKind ? getConceptIconSortRank(entry.iconSort) : 0);
 
+const projectStatusConfig = {
+   LIVE: {
+      icon: SealCheckIcon,
+      iconClassName: "text-emerald-600",
+      label: "Live",
+      sortOrder: 0,
+   },
+   PUBLISHED: {
+      icon: SealCheckIcon,
+      iconClassName: "text-emerald-600",
+      label: "Published",
+      sortOrder: 1,
+   },
+   BUILDING: {
+      icon: GearFineIcon,
+      iconClassName: "text-amber-600",
+      label: "Building...",
+      sortOrder: 2,
+   },
+   RETIRED: {
+      icon: SkullIcon,
+      iconClassName: "text-red-600",
+      label: "Retired",
+      sortOrder: 3,
+   },
+} satisfies Record<ProjectStatus, { icon: React.ComponentType<{ className?: string }>; iconClassName: string; label: string; sortOrder: number }>;
+
+const getProjectDateLabel = (entry: EntryTableRow) => {
+   if (!entry.projectDobYear) return "";
+   if (entry.projectDodYear) return `${entry.projectDobYear}-${entry.projectDodYear}`;
+   return String(entry.projectDobYear);
+};
+
+function ProjectStatusLabel({ status }: { status: ProjectStatus | null | undefined }) {
+   if (!status) return null;
+
+   const config = projectStatusConfig[status];
+   const Icon = config.icon;
+
+   return (
+      <span className="inline-flex items-center gap-1.5 text-base leading-6 text-muted-foreground">
+         <Icon className={cn("size-4", config.iconClassName)} />
+         {config.label}
+      </span>
+   );
+}
+
+const getProjectStatusRowClassName = (status: ProjectStatus | null | undefined) => {
+   if (status === "RETIRED") return "bg-red-500/[0.035] hover:bg-red-500/[0.06]";
+   if (status === "BUILDING") return "bg-amber-500/[0.04] hover:bg-amber-500/[0.065]";
+   if (status === "LIVE" || status === "PUBLISHED") return "bg-emerald-500/[0.035] hover:bg-emerald-500/[0.06]";
+   return null;
+};
+
 function EntryIcon({ entry }: { entry: EntryTableRow }) {
    if (entry.conceptKind) {
       return <ConceptKindIcon className="size-5" conceptKind={entry.conceptKind} weight="regular" />;
@@ -107,11 +172,18 @@ const getAriaSort = (direction: false | "asc" | "desc") => {
 
 const getTitleDesc = (sorting: SortingState) => sorting.find((sort) => sort.id === "title")?.desc ?? false;
 
+const getTitleSorting = (sorting: SortingState) => sorting.find((sort) => sort.id === "title");
+
 const getIconSorting = (sorting: SortingState) => sorting.find((sort) => sort.id === "iconSort");
 
+const getProjectDobSorting = (sorting: SortingState) => sorting.find((sort) => sort.id === "projectDobSort");
+
+const getProjectStatusSorting = (sorting: SortingState) => sorting.find((sort) => sort.id === "projectStatus");
+
 export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTableProps) {
+   const isProjectsSection = sectionSlugSingular === "project";
    const [query, setQuery] = React.useState("");
-   const [sorting, setSorting] = React.useState<SortingState>([{ id: "title", desc: false }]);
+   const [sorting, setSorting] = React.useState<SortingState>([{ id: isProjectsSection ? "projectDobSort" : "title", desc: isProjectsSection }]);
    const showIconColumn = sectionSlugSingular === "concept" || entries.some(hasFormationIntersection);
    const normalizedQuery = query.trim().toLowerCase();
    const effectiveSorting = React.useMemo<SortingState>(
@@ -122,8 +194,23 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
    const toggleTitleSort = React.useCallback(() => {
       setSorting((currentSorting) => {
          const iconSort = getIconSorting(currentSorting);
-         const nextTitleSort = { id: "title", desc: !getTitleDesc(currentSorting) };
+         const titleSort = getTitleSorting(currentSorting);
+         const nextTitleSort = { id: "title", desc: titleSort ? !titleSort.desc : false };
          return iconSort ? [iconSort, nextTitleSort] : [nextTitleSort];
+      });
+   }, []);
+
+   const toggleProjectDobSort = React.useCallback(() => {
+      setSorting((currentSorting) => {
+         const dobSort = getProjectDobSorting(currentSorting);
+         return [{ id: "projectDobSort", desc: dobSort ? !dobSort.desc : false }];
+      });
+   }, []);
+
+   const toggleProjectStatusSort = React.useCallback(() => {
+      setSorting((currentSorting) => {
+         const statusSort = getProjectStatusSorting(currentSorting);
+         return [{ id: "projectStatus", desc: statusSort ? !statusSort.desc : false }];
       });
    }, []);
 
@@ -147,6 +234,7 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
             ...entry,
             href: getEntryHref(entry, sectionSlugSingular),
             iconSort: getIconSort(entry),
+            projectDobSort: entry.projectDobYear ?? null,
             searchScore: score,
          }));
    }, [entries, normalizedQuery, sectionSlugSingular]);
@@ -166,6 +254,40 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
                </a>
             ),
          },
+         ...(isProjectsSection
+            ? [
+                 {
+                    accessorKey: "projectDobSort",
+                    header: ({ column }) => <SortHeader label="DOB-DOD" onClick={toggleProjectDobSort} sortDirection={column.getIsSorted()} />,
+                    sortingFn: (rowA, rowB) => {
+                       const valueA = rowA.original.projectDobSort;
+                       const valueB = rowB.original.projectDobSort;
+
+                       if (valueA === null && valueB === null) return 0;
+                       if (valueA === null) return 1;
+                       if (valueB === null) return -1;
+
+                       return valueA - valueB;
+                    },
+                    cell: ({ row }) => <span className="text-base leading-6 text-muted-foreground">{getProjectDateLabel(row.original)}</span>,
+                 } satisfies ColumnDef<EntryTableRow>,
+                 {
+                    accessorKey: "projectStatus",
+                    header: ({ column }) => <SortHeader label="Status" onClick={toggleProjectStatusSort} sortDirection={column.getIsSorted()} />,
+                    sortingFn: (rowA, rowB) => {
+                       const valueA = rowA.original.projectStatus;
+                       const valueB = rowB.original.projectStatus;
+
+                       if (!valueA && !valueB) return 0;
+                       if (!valueA) return 1;
+                       if (!valueB) return -1;
+
+                       return projectStatusConfig[valueA].sortOrder - projectStatusConfig[valueB].sortOrder;
+                    },
+                    cell: ({ row }) => <ProjectStatusLabel status={row.original.projectStatus} />,
+                 } satisfies ColumnDef<EntryTableRow>,
+              ]
+            : []),
          {
             accessorKey: "description",
             enableSorting: false,
@@ -205,7 +327,7 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
          },
          ...sharedColumns,
       ];
-   }, [showIconColumn, toggleTitleSort, toggleTypeSort]);
+   }, [isProjectsSection, showIconColumn, toggleProjectDobSort, toggleProjectStatusSort, toggleTitleSort, toggleTypeSort]);
 
    const table = useReactTable({
       columns,
@@ -258,11 +380,15 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
                            className={
                               header.column.id === "iconSort"
                                  ? "w-px whitespace-nowrap"
-                                 : header.column.id === "title"
-                                   ? "min-w-48"
-                                   : header.column.id === "description"
-                                     ? "min-w-72"
-                                     : undefined
+                                 : header.column.id === "projectDobSort"
+                                   ? "w-px whitespace-nowrap"
+                                   : header.column.id === "projectStatus"
+                                     ? "w-px whitespace-nowrap"
+                                     : header.column.id === "title"
+                                       ? "min-w-48"
+                                       : header.column.id === "description"
+                                         ? "min-w-72"
+                                         : undefined
                            }
                            key={header.id}
                         >
@@ -275,7 +401,7 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
             <TableBody>
                {table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
-                     <TableRow className="group" key={row.id}>
+                     <TableRow className={cn("group", getProjectStatusRowClassName(row.original.projectStatus))} key={row.id}>
                         {row.getVisibleCells().map((cell) => (
                            <TableCell
                               className={
@@ -283,9 +409,11 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
                                     ? "min-w-72 whitespace-normal py-5"
                                     : cell.column.id === "iconSort"
                                       ? "w-px whitespace-nowrap py-5"
-                                      : cell.column.id === "title"
-                                        ? "min-w-48 whitespace-normal py-5"
-                                        : "whitespace-nowrap py-5"
+                                      : cell.column.id === "projectDobSort" || cell.column.id === "projectStatus"
+                                        ? "w-px whitespace-nowrap py-5"
+                                        : cell.column.id === "title"
+                                          ? "min-w-48 whitespace-normal py-5"
+                                          : "whitespace-nowrap py-5"
                               }
                               key={cell.id}
                            >

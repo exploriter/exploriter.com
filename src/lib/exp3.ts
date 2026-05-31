@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 
 export type ConceptKind = "INDIVIDUAL" | "COLLECTION";
+export type ProjectStatus = "LIVE" | "PUBLISHED" | "BUILDING" | "RETIRED";
 
 export type FormationIntersectionSummary = {
    slug: string;
@@ -23,6 +24,9 @@ export type EntrySummary = {
    title: string;
    description: string;
    conceptKind: ConceptKind | null;
+   projectDobYear?: number | null;
+   projectDodYear?: number | null;
+   projectStatus?: ProjectStatus | null;
 };
 
 export type EntryPage = EntrySummary & {
@@ -62,6 +66,9 @@ type EntrySummaryRow = {
    title: string;
    description: string;
    concept_kind: ConceptKind | null;
+   project_dob_year?: number | null;
+   project_dod_year?: number | null;
+   project_status?: ProjectStatus | null;
 };
 
 type EntryPageRow = {
@@ -95,6 +102,9 @@ const mapEntrySummary = (row: EntrySummaryRow): EntrySummary => ({
    title: row.title,
    description: row.description,
    conceptKind: row.concept_kind,
+   projectDobYear: row.project_dob_year ?? null,
+   projectDodYear: row.project_dod_year ?? null,
+   projectStatus: row.project_status ?? null,
 });
 
 const mapFormationIntersectionPageSummary = (row: FormationIntersectionPageSummaryRow): FormationIntersectionPageSummary => ({
@@ -173,10 +183,14 @@ export const listEntrySummariesByFormationIntersectionSlug = async (slug: string
          entries.slug,
          entries.title,
          entries.description,
-         concept_entry_details.concept_kind
+         concept_entry_details.concept_kind,
+         project_entry_details.dob_year AS project_dob_year,
+         project_entry_details.dod_year AS project_dod_year,
+         project_entry_details.status AS project_status
       FROM formation_intersections
       JOIN entries ON entries.formation_intersection_id = formation_intersections.id
       LEFT JOIN concept_entry_details ON concept_entry_details.entry_id = entries.id
+      LEFT JOIN project_entry_details ON project_entry_details.entry_id = entries.id
       WHERE formation_intersections.slug = ?
       ORDER BY entries.title ASC
       `

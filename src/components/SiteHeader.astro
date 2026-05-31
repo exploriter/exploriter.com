@@ -1,5 +1,14 @@
 ---
 import { BrowserIcon, IdentificationCardIcon } from "@phosphor-icons/react/ssr";
+import { cn } from "@/lib/css";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const authorPath = "/story/jason";
+const sitePath = "/project/exploriter";
+const isAuthorPage = currentPath === authorPath;
+const isSitePage = currentPath === sitePath;
+
+const linkClass = "flex items-center gap-1 hover:underline underline-offset-2";
 ---
 
 <header class="py-2.5 px-4 mb-12 border-b border-b-mist-200/70 bg-mist-100/33">
@@ -15,13 +24,13 @@ import { BrowserIcon, IdentificationCardIcon } from "@phosphor-icons/react/ssr";
          </a>
       </h1>
       <nav class="flex items-center gap-2 sm:gap-4">
-         <a href="/story/jason" aria-label="About the Author" class="flex items-center gap-1 hover:underline underline-offset-2">
+         <a href={authorPath} aria-label="About the Author" aria-current={isAuthorPage ? "page" : undefined} class={cn(linkClass, isAuthorPage && "underline")}>
             <IdentificationCardIcon weight="thin" className="size-5.5" />
             <span class="text-xs uppercase hidden sm:inline"
                ><span class="font-mono opacity-70">About:</span> <span class="font-medium">Author</span></span
             >
          </a>
-         <a href="/project/exploriter" aria-label="About the Site" class="flex items-center gap-1 hover:underline underline-offset-2">
+         <a href={sitePath} aria-label="About the Site" aria-current={isSitePage ? "page" : undefined} class={cn(linkClass, isSitePage && "underline")}>
             <BrowserIcon weight="thin" className="size-5.5" />
             <span class="text-xs uppercase hidden sm:inline"
                ><span class="font-mono opacity-70">About:</span> <span class="font-medium">Site</span></span
