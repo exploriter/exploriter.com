@@ -1,9 +1,9 @@
 import * as React from "react";
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
-import { CaretDownIcon, CaretUpDownIcon, CaretUpIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, CaretUpDownIcon, CaretUpIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
-import { Input } from "@/components/ui/input";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { ConceptKind, EntrySummary, EntryWithFormationIntersection } from "@/lib/exp3";
 
@@ -54,6 +54,16 @@ const getIconSort = (entry: EntrySummary | EntryWithFormationIntersection) => {
    if (hasFormationIntersection(entry)) return entry.formationIntersection.nameSingular;
    return "";
 };
+
+const getConceptIconSortRank = (value: string) => {
+   if (value === conceptKindLabels.INDIVIDUAL) return 0;
+   if (value === conceptKindLabels.COLLECTION) return 1;
+   return 2;
+};
+
+const getTypeSortPrimaryValue = (entry: EntryTableRow) => entry.formationIntersection?.sortOrder ?? getConceptIconSortRank(entry.iconSort);
+
+const getTypeSortSecondaryValue = (entry: EntryTableRow) => (entry.conceptKind ? getConceptIconSortRank(entry.iconSort) : 0);
 
 function EntryIcon({ entry }: { entry: EntryTableRow }) {
    if (entry.conceptKind) {
@@ -170,6 +180,21 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
          {
             accessorKey: "iconSort",
             header: ({ column }) => <SortHeader label="Type" onClick={toggleTypeSort} sortDirection={column.getIsSorted()} />,
+            sortingFn: (rowA, rowB) => {
+               const valueA = rowA.original.iconSort;
+               const valueB = rowB.original.iconSort;
+               const rankA = getTypeSortPrimaryValue(rowA.original);
+               const rankB = getTypeSortPrimaryValue(rowB.original);
+
+               if (rankA !== rankB) return rankA - rankB;
+
+               const secondaryRankA = getTypeSortSecondaryValue(rowA.original);
+               const secondaryRankB = getTypeSortSecondaryValue(rowB.original);
+
+               if (secondaryRankA !== secondaryRankB) return secondaryRankA - secondaryRankB;
+
+               return valueA.localeCompare(valueB);
+            },
             cell: ({ row }) =>
                row.original.iconSort ? (
                   <div className="flex items-start pl-2 pt-0.5">
@@ -199,14 +224,27 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
    return (
       <div>
          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-            <Input
-               aria-label="Search entries"
-               className="max-w-sm"
-               onChange={(event) => setQuery(event.target.value)}
-               placeholder="Search entries..."
-               type="search"
-               value={query}
-            />
+            <InputGroup className="max-w-sm">
+               <InputGroupAddon>
+                  <InputGroupText>
+                     <MagnifyingGlassIcon />
+                  </InputGroupText>
+               </InputGroupAddon>
+               <InputGroupInput
+                  aria-label="Search entries"
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search entries..."
+                  type="text"
+                  value={query}
+               />
+               {query ? (
+                  <InputGroupAddon align="inline-end">
+                     <InputGroupButton aria-label="Clear search" onClick={() => setQuery("")} size="icon-xs">
+                        <XIcon />
+                     </InputGroupButton>
+                  </InputGroupAddon>
+               ) : null}
+            </InputGroup>
             <p className="shrink-0 font-mono text-xs uppercase text-muted-foreground">{entries.length} total</p>
          </div>
 

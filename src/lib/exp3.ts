@@ -30,7 +30,9 @@ export type EntryPage = EntrySummary & {
 };
 
 export type EntryWithFormationIntersection = EntrySummary & {
-   formationIntersection: Pick<FormationIntersectionSummary, "slug" | "slugSingular" | "nameSingular">;
+   formationIntersection: Pick<FormationIntersectionSummary, "slug" | "slugSingular" | "nameSingular"> & {
+      sortOrder: number;
+   };
 };
 
 type FormationIntersectionSummaryRow = {
@@ -76,6 +78,7 @@ type EntryWithFormationIntersectionRow = EntrySummaryRow & {
    formation_intersection_slug: string;
    formation_intersection_slug_singular: string;
    formation_intersection_name_singular: string;
+   formation_intersection_sort_order: number;
 };
 
 const mapFormationIntersectionSummary = (row: FormationIntersectionSummaryRow): FormationIntersectionSummary => ({
@@ -113,6 +116,7 @@ const mapEntryWithFormationIntersection = (row: EntryWithFormationIntersectionRo
       slug: row.formation_intersection_slug,
       slugSingular: row.formation_intersection_slug_singular,
       nameSingular: row.formation_intersection_name_singular,
+      sortOrder: row.formation_intersection_sort_order,
    },
 });
 
@@ -193,7 +197,8 @@ export const listAllEntrySummaries = async () => {
          concept_entry_details.concept_kind,
          formation_intersections.slug AS formation_intersection_slug,
          formation_intersections.slug_singular AS formation_intersection_slug_singular,
-         formation_intersections.name_singular AS formation_intersection_name_singular
+         formation_intersections.name_singular AS formation_intersection_name_singular,
+         formation_intersections.sort_order AS formation_intersection_sort_order
       FROM entries
       JOIN formation_intersections ON formation_intersections.id = entries.formation_intersection_id
       LEFT JOIN concept_entry_details ON concept_entry_details.entry_id = entries.id
