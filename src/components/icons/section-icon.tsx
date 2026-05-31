@@ -1,16 +1,18 @@
-import { VectorThreeIcon } from "@phosphor-icons/react/dist/ssr/VectorThree";
-import { ShareNetworkIcon } from "@phosphor-icons/react/dist/ssr/ShareNetwork";
-import { CircleIcon } from "@phosphor-icons/react/dist/ssr/Circle";
-import { PlusSquareIcon } from "@phosphor-icons/react/dist/ssr/PlusSquare";
-import { GlobeIcon } from "@phosphor-icons/react/dist/ssr/Globe";
-import { BoundingBoxIcon } from "@phosphor-icons/react/dist/ssr/BoundingBox";
-import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr/ArrowsClockwise";
-import { FlowerLotusIcon } from "@phosphor-icons/react/dist/ssr/FlowerLotus";
-import { TriangleIcon } from "@phosphor-icons/react/dist/ssr/Triangle";
-import { LadderSimpleIcon } from "@phosphor-icons/react/dist/ssr/LadderSimple";
+import {
+   ArrowsClockwiseIcon,
+   BoundingBoxIcon,
+   CircleIcon,
+   FlowerLotusIcon,
+   GlobeIcon,
+   LadderSimpleIcon,
+   PlusSquareIcon,
+   ShareNetworkIcon,
+   TriangleIcon,
+   VectorThreeIcon,
+} from "@phosphor-icons/react/ssr";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/css";
-import type { Icon, IconWeight } from "@phosphor-icons/react";
+import type { Icon, IconWeight } from "@phosphor-icons/react/lib";
 import type { ConceptKind } from "@/lib/exp3";
 
 type SectionIconProps = {
