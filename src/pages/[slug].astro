@@ -1,8 +1,9 @@
 ---
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
+import EntriesTable from "@/components/EntriesTable";
 import NotFoundPage from "@/components/NotFoundPage.astro";
-import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
+import SectionIcon from "@/components/icons/section-icon";
 import {
    getFormationIntersectionSummaryBySlug,
    listAnalogSummariesByFormationIntersectionSlug,
@@ -55,37 +56,8 @@ const analogs = slug && section ? await listAnalogSummariesByFormationIntersecti
             </div>
 
             <section class="mt-12">
-               <div class="flex items-end justify-between gap-4 border-b border-border pb-3">
-                  <h2 class="font-mono text-xs uppercase text-muted-foreground">Entries</h2>
-                  <p class="font-mono text-xs uppercase text-muted-foreground">{entries.length} total</p>
-               </div>
-
                {entries.length > 0 ? (
-                  <ul class="divide-y divide-border">
-                     {entries.map((entry) => (
-                        <li>
-                           <a
-                              href={`/${section.slugSingular}/${entry.slug}`}
-                              class="group -mx-3 block rounded-md px-3 py-5 transition hover:bg-muted/50 sm:-mx-4 sm:px-4"
-                           >
-                              <div class="flex items-center">
-                                 {section.slugSingular === "concept" && entry.conceptKind ? (
-                                    <ConceptKindIcon
-                                       className="size-5 hidden sm:block mr-2"
-                                       conceptKind={entry.conceptKind}
-                                       weight="regular"
-                                       client:only="react"
-                                    />
-                                 ) : null}
-                                 <h3 class="font-serif text-xl group-hover:underline group-hover:decoration-1 group-hover:underline-offset-2">
-                                    {entry.title}
-                                 </h3>
-                              </div>
-                              {entry.description ? <p class="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">{entry.description}</p> : null}
-                           </a>
-                        </li>
-                     ))}
-                  </ul>
+                  <EntriesTable entries={entries} sectionSlugSingular={section.slugSingular} client:load />
                ) : (
                   <p class="py-6 text-sm leading-6 text-muted-foreground">No entries have been published in this section yet.</p>
                )}
