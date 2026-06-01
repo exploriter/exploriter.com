@@ -2,16 +2,22 @@
 import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
 import EntriesTable from "@/components/EntriesTable";
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
-import { listAllEntrySummaries } from "@/lib/exp3";
+import { listAllEntrySummaries, listFormationIntersectionSummaries } from "@/lib/exp3";
 
 export const prerender = false;
 
 const entries = await listAllEntrySummaries();
+const sections = await listFormationIntersectionSummaries();
+const sectionSwitcher = {
+   label: "Select section",
+   options: [{ label: "All Entries", href: "/all" }, ...sections.map((section) => ({ label: section.name, href: `/${section.slug}` }))],
+   value: "/all",
+};
 ---
 
 <HeaderLayout title="All Entries — Exploriter" description="All EXP3 knowledge base entries listed alphabetically.">
    <section class="mx-auto max-w-6xl px-4 pb-20">
-      <BreadcrumbTrail items={[{ label: "All Entries" }]} />
+      <BreadcrumbTrail items={[{ label: "All Entries", sectionSwitcher }]} />
 
       <div class="mt-8">
          <h1 class="min-w-0 shrink-0 -ml-0.5 font-serif text-5xl leading-tight">All Entries</h1>

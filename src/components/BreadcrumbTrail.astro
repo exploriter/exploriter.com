@@ -1,10 +1,21 @@
 ---
 import { HouseLineIcon } from "@phosphor-icons/react/ssr";
+import BreadcrumbSectionSelect from "@/components/BreadcrumbSectionSelect";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+
+type BreadcrumbTrailSectionOption = {
+   label: string;
+   href: string;
+};
 
 type BreadcrumbTrailItem = {
    label: string;
    href?: string;
+   sectionSwitcher?: {
+      label?: string;
+      options: BreadcrumbTrailSectionOption[];
+      value: string;
+   };
 };
 
 interface Props {
@@ -32,7 +43,14 @@ const hasTrailingContent = Astro.slots.has("default");
                <>
                   <BreadcrumbSeparator className="shrink-0" />
                   <BreadcrumbItem className={isCurrentPage ? "min-w-0 flex-1 overflow-hidden sm:flex-none" : "shrink-0"}>
-                     {item.href && !isCurrentPage ? (
+                     {item.sectionSwitcher ? (
+                        <BreadcrumbSectionSelect
+                           label={item.sectionSwitcher.label}
+                           options={item.sectionSwitcher.options}
+                           value={item.sectionSwitcher.value}
+                           client:load
+                        />
+                     ) : item.href && !isCurrentPage ? (
                         <BreadcrumbLink href={item.href} className="whitespace-nowrap hover:underline hover:underline-offset-4">
                            {item.label}
                         </BreadcrumbLink>

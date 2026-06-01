@@ -8,6 +8,7 @@ import {
    getFormationIntersectionSummaryBySlug,
    listAnalogSummariesByFormationIntersectionSlug,
    listEntrySummariesByFormationIntersectionSlug,
+   listFormationIntersectionSummaries,
 } from "@/lib/exp3";
 
 export const prerender = false;
@@ -22,6 +23,12 @@ if (!section) {
 
 const entries = slug && section ? await listEntrySummariesByFormationIntersectionSlug(slug) : [];
 const analogs = slug && section ? await listAnalogSummariesByFormationIntersectionSlug(slug) : [];
+const sections = section ? await listFormationIntersectionSummaries() : [];
+const sectionSwitcher = {
+   label: "Select section",
+   options: [{ label: "All Entries", href: "/all" }, ...sections.map((section) => ({ label: section.name, href: `/${section.slug}` }))],
+   value: `/${section?.slug ?? ""}`,
+};
 ---
 
 <HeaderLayout
@@ -31,7 +38,7 @@ const analogs = slug && section ? await listAnalogSummariesByFormationIntersecti
    {
       section ? (
          <section class="mx-auto max-w-6xl px-4 pb-20">
-            <BreadcrumbTrail items={[{ label: section.name }]} />
+            <BreadcrumbTrail items={[{ label: section.name, sectionSwitcher }]} />
 
             <div class="mt-8">
                <div class="flex items-center gap-4">
