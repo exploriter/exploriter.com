@@ -160,7 +160,7 @@ function SortHeader({ label, onClick, sortDirection }: { label: string; onClick:
    return (
       <button
          aria-label={`Sort by ${label.toLowerCase()}`}
-         className="-ml-2 inline-flex h-8 items-center gap-1 rounded-sm px-2 font-mono text-xs uppercase text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+         className="inline-flex h-8 items-center gap-1 rounded-sm font-mono text-xs uppercase text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
          onClick={onClick}
          type="button"
       >
@@ -261,7 +261,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             accessorKey: "title",
             header: ({ column }) => <SortHeader label="Title" onClick={toggleTitleSort} sortDirection={column.getIsSorted()} />,
             cell: ({ row }) => (
-               <a className="text-base font-medium leading-6 hover:underline hover:decoration-1 hover:underline-offset-2" href={row.original.href}>
+               <a className="text-base hover:underline hover:decoration-1 hover:underline-offset-2" href={row.original.href}>
                   {row.original.title}
                </a>
             ),
@@ -281,7 +281,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
 
                        return valueA - valueB;
                     },
-                    cell: ({ row }) => <span className="text-sm leading-6 text-muted-foreground font-mono">{getProjectDateLabel(row.original)}</span>,
+                    cell: ({ row }) => <span className="text-sm text-muted-foreground font-mono">{getProjectDateLabel(row.original)}</span>,
                  } satisfies ColumnDef<EntryTableRow>,
                  {
                     accessorKey: "projectStatus",
@@ -304,7 +304,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             accessorKey: "description",
             enableSorting: false,
             header: () => <span className="font-mono text-xs uppercase text-muted-foreground">Description</span>,
-            cell: ({ row }) => <span className="text-base leading-6 text-muted-foreground">{row.original.description}</span>,
+            cell: ({ row }) => <span className="text-sm text-muted-foreground">{row.original.description}</span>,
          },
       ];
 
@@ -331,7 +331,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             },
             cell: ({ row }) =>
                row.original.iconSort ? (
-                  <div className="flex items-start pl-1.75 pt-0.5">
+                  <div className="flex justify-center pt-0.5">
                      <EntryIcon entry={row.original} />
                      <span className="sr-only">{row.original.iconSort}</span>
                   </div>
@@ -395,67 +395,71 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             </div>
          </div>
 
-         <Table>
-            <TableHeader>
-               {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                     {headerGroup.headers.map((header) => (
-                        <TableHead
-                           aria-sort={header.column.getCanSort() ? getAriaSort(header.column.getIsSorted()) : undefined}
-                           className={
-                              header.column.id === "iconSort"
-                                 ? "w-px whitespace-nowrap"
-                                 : header.column.id === "projectDobSort"
-                                   ? "w-px whitespace-nowrap"
-                                   : header.column.id === "projectStatus"
-                                     ? "w-px whitespace-nowrap"
-                                     : header.column.id === "title"
-                                       ? "min-w-58"
-                                       : header.column.id === "description"
-                                         ? "min-w-72"
-                                         : undefined
-                           }
-                           key={header.id}
-                        >
-                           {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                        </TableHead>
-                     ))}
-                  </TableRow>
-               ))}
-            </TableHeader>
-            <TableBody>
-               {table.getRowModel().rows.length > 0 ? (
-                  table.getRowModel().rows.map((row) => (
-                     <TableRow className={cn("group", getProjectStatusRowClassName(row.original.projectStatus))} key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
-                           <TableCell
-                              className={
-                                 cell.column.id === "description"
-                                    ? "min-w-72 whitespace-normal py-5"
-                                    : cell.column.id === "iconSort"
-                                      ? "w-px whitespace-nowrap py-5"
-                                      : cell.column.id === "projectDobSort" || cell.column.id === "projectStatus"
-                                        ? "w-px whitespace-nowrap py-5"
-                                        : cell.column.id === "title"
-                                          ? "min-w-58 whitespace-normal py-5"
-                                          : "whitespace-nowrap py-5"
-                              }
-                              key={cell.id}
+         <div className="mt-4 overflow-hidden rounded-md border border-border">
+            <Table>
+               <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                     <TableRow key={headerGroup.id}>
+                        {headerGroup.headers.map((header) => (
+                           <TableHead
+                              aria-sort={header.column.getCanSort() ? getAriaSort(header.column.getIsSorted()) : undefined}
+                              className={cn(
+                                 "border-r border-border last:border-r-0",
+                                 header.column.id === "iconSort"
+                                    ? "w-px whitespace-nowrap"
+                                    : header.column.id === "projectDobSort"
+                                      ? "w-px whitespace-nowrap"
+                                      : header.column.id === "projectStatus"
+                                        ? "w-px whitespace-nowrap"
+                                        : header.column.id === "title"
+                                          ? "min-w-58"
+                                          : header.column.id === "description"
+                                            ? "min-w-72"
+                                            : undefined
+                              )}
+                              key={header.id}
                            >
-                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                           </TableCell>
+                              {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                           </TableHead>
                         ))}
                      </TableRow>
-                  ))
-               ) : (
-                  <TableRow>
-                     <TableCell className="py-6 leading-6 text-muted-foreground" colSpan={table.getVisibleLeafColumns().length}>
-                        No entries match your search.
-                     </TableCell>
-                  </TableRow>
-               )}
-            </TableBody>
-         </Table>
+                  ))}
+               </TableHeader>
+               <TableBody>
+                  {table.getRowModel().rows.length > 0 ? (
+                     table.getRowModel().rows.map((row) => (
+                        <TableRow className={cn("group", getProjectStatusRowClassName(row.original.projectStatus))} key={row.id}>
+                           {row.getVisibleCells().map((cell) => (
+                              <TableCell
+                                 className={cn(
+                                    "border-r border-border last:border-r-0",
+                                    cell.column.id === "description"
+                                       ? "min-w-72 whitespace-normal"
+                                       : cell.column.id === "iconSort"
+                                         ? "w-px whitespace-nowrap"
+                                         : cell.column.id === "projectDobSort" || cell.column.id === "projectStatus"
+                                           ? "w-px whitespace-nowrap"
+                                           : cell.column.id === "title"
+                                             ? "min-w-58 whitespace-normal"
+                                             : "whitespace-nowrap"
+                                 )}
+                                 key={cell.id}
+                              >
+                                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </TableCell>
+                           ))}
+                        </TableRow>
+                     ))
+                  ) : (
+                     <TableRow>
+                        <TableCell className="text-muted-foreground" colSpan={table.getVisibleLeafColumns().length}>
+                           No entries match your search.
+                        </TableCell>
+                     </TableRow>
+                  )}
+               </TableBody>
+            </Table>
+         </div>
       </div>
    );
 }
