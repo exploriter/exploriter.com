@@ -261,7 +261,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             accessorKey: "title",
             header: ({ column }) => <SortHeader label="Title" onClick={toggleTitleSort} sortDirection={column.getIsSorted()} />,
             cell: ({ row }) => (
-               <a className="text-base leading-6 hover:underline hover:decoration-1 hover:underline-offset-2" href={row.original.href}>
+               <a className="text-base font-medium leading-6 hover:underline hover:decoration-1 hover:underline-offset-2" href={row.original.href}>
                   {row.original.title}
                </a>
             ),
@@ -410,7 +410,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
                                    : header.column.id === "projectStatus"
                                      ? "w-px whitespace-nowrap"
                                      : header.column.id === "title"
-                                       ? "min-w-48"
+                                       ? "min-w-58"
                                        : header.column.id === "description"
                                          ? "min-w-72"
                                          : undefined
@@ -437,7 +437,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
                                       : cell.column.id === "projectDobSort" || cell.column.id === "projectStatus"
                                         ? "w-px whitespace-nowrap py-5"
                                         : cell.column.id === "title"
-                                          ? "min-w-48 whitespace-normal py-5"
+                                          ? "min-w-58 whitespace-normal py-5"
                                           : "whitespace-nowrap py-5"
                               }
                               key={cell.id}
