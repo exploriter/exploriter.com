@@ -19,6 +19,7 @@ import type { ConceptKind, EntrySummary, EntryWithFormationIntersection, Project
 
 type EntriesTableProps = {
    entries: Array<EntrySummary | EntryWithFormationIntersection>;
+   searchPlaceholder?: string;
    sectionSlugSingular?: string;
 };
 
@@ -180,7 +181,7 @@ const getProjectDobSorting = (sorting: SortingState) => sorting.find((sort) => s
 
 const getProjectStatusSorting = (sorting: SortingState) => sorting.find((sort) => sort.id === "projectStatus");
 
-export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTableProps) {
+export default function EntriesTable({ entries, searchPlaceholder = "Search entries...", sectionSlugSingular }: EntriesTableProps) {
    const isProjectsSection = sectionSlugSingular === "project";
    const [query, setQuery] = React.useState("");
    const [sorting, setSorting] = React.useState<SortingState>([{ id: isProjectsSection ? "projectDobSort" : "title", desc: isProjectsSection }]);
@@ -355,7 +356,7 @@ export default function EntriesTable({ entries, sectionSlugSingular }: EntriesTa
                <InputGroupInput
                   aria-label="Search entries"
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search entries..."
+                  placeholder={searchPlaceholder}
                   type="text"
                   value={query}
                />

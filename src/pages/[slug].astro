@@ -57,7 +57,12 @@ const analogs = slug && section ? await listAnalogSummariesByFormationIntersecti
 
             <section class="mt-12">
                {entries.length > 0 ? (
-                  <EntriesTable entries={entries} sectionSlugSingular={section.slugSingular} client:load />
+                  <EntriesTable
+                     entries={entries}
+                     searchPlaceholder={`Search ${section.name.toLowerCase()}...`}
+                     sectionSlugSingular={section.slugSingular}
+                     client:load
+                  />
                ) : (
                   <p class="py-6 text-sm leading-6 text-muted-foreground">No entries have been published in this section yet.</p>
                )}
