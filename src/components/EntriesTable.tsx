@@ -281,7 +281,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
 
                        return valueA - valueB;
                     },
-                    cell: ({ row }) => <span className="text-base leading-6 text-muted-foreground">{getProjectDateLabel(row.original)}</span>,
+                    cell: ({ row }) => <span className="text-sm leading-6 text-muted-foreground font-mono">{getProjectDateLabel(row.original)}</span>,
                  } satisfies ColumnDef<EntryTableRow>,
                  {
                     accessorKey: "projectStatus",
@@ -331,7 +331,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             },
             cell: ({ row }) =>
                row.original.iconSort ? (
-                  <div className="flex items-start pl-2 pt-0.5">
+                  <div className="flex items-start pl-1.75 pt-0.5">
                      <EntryIcon entry={row.original} />
                      <span className="sr-only">{row.original.iconSort}</span>
                   </div>
