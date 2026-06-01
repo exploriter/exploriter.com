@@ -31,6 +31,7 @@ export type EntrySummary = {
 
 export type EntryPage = EntrySummary & {
    formationIntersection: Pick<FormationIntersectionSummary, "slug" | "name" | "nameSingular">;
+   projectLink?: string | null;
 };
 
 export type EntryWithFormationIntersection = EntrySummary & {
@@ -76,6 +77,7 @@ type EntryPageRow = {
    title: string;
    description: string;
    concept_kind: ConceptKind | null;
+   project_link?: string | null;
    formation_intersection_slug: string;
    formation_intersection_name: string;
    formation_intersection_name_singular: string;
@@ -231,12 +233,14 @@ export const getEntryPageBySlugs = async (slugSingular: string, entrySlug: strin
          entries.title,
          entries.description,
          concept_entry_details.concept_kind,
+         project_entry_details.link AS project_link,
          formation_intersections.slug AS formation_intersection_slug,
          formation_intersections.name AS formation_intersection_name,
          formation_intersections.name_singular AS formation_intersection_name_singular
       FROM formation_intersections
       JOIN entries ON entries.formation_intersection_id = formation_intersections.id
       LEFT JOIN concept_entry_details ON concept_entry_details.entry_id = entries.id
+      LEFT JOIN project_entry_details ON project_entry_details.entry_id = entries.id
       WHERE formation_intersections.slug_singular = ? AND entries.slug = ?
       LIMIT 1
       `
@@ -251,6 +255,7 @@ export const getEntryPageBySlugs = async (slugSingular: string, entrySlug: strin
       title: row.title,
       description: row.description,
       conceptKind: row.concept_kind,
+      projectLink: row.project_link ?? null,
       formationIntersection: {
          slug: row.formation_intersection_slug,
          name: row.formation_intersection_name,

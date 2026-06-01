@@ -3,8 +3,11 @@ import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
 import NotFoundPage from "@/components/NotFoundPage.astro";
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/css";
 import { loadEntryContent } from "@/lib/entry-content";
 import { getEntryPageBySlugs, listFormationIntersectionSummaries } from "@/lib/exp3";
+import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 
 export const prerender = false;
 
@@ -41,9 +44,22 @@ const sectionSwitcher = {
                )}
             </BreadcrumbTrail>
 
-            <header class="mt-10 max-w-3xl">
-               <h1 class="-ml-0.5 font-serif text-5xl leading-tight">{entry.title}</h1>
-               <p class="mt-5 font-serif text-xl leading-8 text-muted-foreground">{entry.description}</p>
+            <header class="mt-10">
+               <div class="flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start">
+                  <h1 class="-ml-0.5 flex-1 font-serif text-5xl leading-tight">{entry.title}</h1>
+                  {entry.projectLink ? (
+                     <a
+                        class={cn(buttonVariants({ variant: "outline", size: "default" }), "sm:ml-auto sm:mt-2")}
+                        href={entry.projectLink}
+                        rel="noreferrer"
+                        target="_blank"
+                     >
+                        Visit
+                        <ArrowSquareOutIcon className="size-3.5" aria-hidden="true" />
+                     </a>
+                  ) : null}
+               </div>
+               <p class="mt-5 max-w-3xl font-serif text-xl leading-8 text-muted-foreground">{entry.description}</p>
             </header>
 
             {EntryContent ? (

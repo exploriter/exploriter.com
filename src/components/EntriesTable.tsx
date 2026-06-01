@@ -12,7 +12,9 @@ import {
 } from "@phosphor-icons/react";
 
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
+import { Badge } from "@/components/ui/badge";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
+import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/css";
 import type { ConceptKind, EntrySummary, EntryWithFormationIntersection, ProjectStatus } from "@/lib/exp3";
@@ -79,30 +81,33 @@ const getTypeSortSecondaryValue = (entry: EntryTableRow) => (entry.conceptKind ?
 
 const projectStatusConfig = {
    LIVE: {
+      badgeClassName: "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
       icon: SealCheckIcon,
-      iconClassName: "text-emerald-600",
       label: "Live",
       sortOrder: 0,
    },
    PUBLISHED: {
+      badgeClassName: "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
       icon: SealCheckIcon,
-      iconClassName: "text-emerald-600",
       label: "Published",
       sortOrder: 1,
    },
    BUILDING: {
+      badgeClassName: "border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400",
       icon: GearFineIcon,
-      iconClassName: "text-amber-600",
       label: "Building...",
       sortOrder: 2,
    },
    RETIRED: {
+      badgeClassName: "border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-400",
       icon: SkullIcon,
-      iconClassName: "text-red-600",
       label: "Retired",
       sortOrder: 3,
    },
-} satisfies Record<ProjectStatus, { icon: React.ComponentType<{ className?: string }>; iconClassName: string; label: string; sortOrder: number }>;
+} satisfies Record<
+   ProjectStatus,
+   { badgeClassName: string; icon: React.ComponentType<{ className?: string; "data-icon"?: string }>; label: string; sortOrder: number }
+>;
 
 const getProjectDateLabel = (entry: EntryTableRow) => {
    if (!entry.projectDobYear) return "";
@@ -117,10 +122,10 @@ function ProjectStatusLabel({ status }: { status: ProjectStatus | null | undefin
    const Icon = config.icon;
 
    return (
-      <span className="inline-flex items-center gap-1.5 text-base leading-6 text-muted-foreground">
-         <Icon className={cn("size-4", config.iconClassName)} />
+      <Badge className={cn("border", config.badgeClassName)} variant="outline">
+         <Icon data-icon="inline-start" />
          {config.label}
-      </span>
+      </Badge>
    );
 }
 
@@ -184,6 +189,7 @@ const getProjectStatusSorting = (sorting: SortingState) => sorting.find((sort) =
 export default function EntriesTable({ entries, searchPlaceholder = "Search entries...", sectionSlugSingular }: EntriesTableProps) {
    const isProjectsSection = sectionSlugSingular === "project";
    const [query, setQuery] = React.useState("");
+   const [showRetired, setShowRetired] = React.useState(false);
    const [sorting, setSorting] = React.useState<SortingState>([{ id: isProjectsSection ? "projectDobSort" : "title", desc: isProjectsSection }]);
    const showIconColumn = sectionSlugSingular === "concept" || entries.some(hasFormationIntersection);
    const normalizedQuery = query.trim().toLowerCase();
@@ -227,8 +233,13 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
       });
    }, []);
 
+   const statusFilteredEntries = React.useMemo(() => {
+      if (!isProjectsSection || showRetired) return entries;
+      return entries.filter((entry) => entry.projectStatus !== "RETIRED");
+   }, [entries, isProjectsSection, showRetired]);
+
    const filteredEntries = React.useMemo(() => {
-      return entries
+      return statusFilteredEntries
          .map((entry) => ({ entry, score: getSearchScore(entry, normalizedQuery) }))
          .filter(({ score }) => !normalizedQuery || score > 0)
          .map(({ entry, score }) => ({
@@ -238,7 +249,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             projectDobSort: entry.projectDobYear ?? null,
             searchScore: score,
          }));
-   }, [entries, normalizedQuery, sectionSlugSingular]);
+   }, [normalizedQuery, sectionSlugSingular, statusFilteredEntries]);
 
    const columns = React.useMemo<ColumnDef<EntryTableRow>[]>(() => {
       const sharedColumns: ColumnDef<EntryTableRow>[] = [
@@ -368,7 +379,20 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
                   </InputGroupAddon>
                ) : null}
             </InputGroup>
-            <p className="shrink-0 font-mono text-xs uppercase text-muted-foreground">{entries.length} total</p>
+            <div className="flex shrink-0 items-center gap-4">
+               {isProjectsSection ? (
+                  <>
+                     <label className="flex items-center gap-2 font-mono text-xs uppercase text-muted-foreground">
+                        <Switch checked={showRetired} onCheckedChange={setShowRetired} size="sm" />
+                        Show Retired
+                     </label>
+                     <span className="font-mono text-xs text-muted-foreground" aria-hidden="true">
+                        &middot;
+                     </span>
+                  </>
+               ) : null}
+               <p className="font-mono text-xs uppercase text-muted-foreground">{statusFilteredEntries.length} total</p>
+            </div>
          </div>
 
          <Table>
