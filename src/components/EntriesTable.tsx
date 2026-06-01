@@ -357,7 +357,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
 
    return (
       <div>
-         <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
+         <div className="flex items-center justify-between gap-4">
             <InputGroup className="max-w-sm">
                <InputGroupAddon>
                   <InputGroupText>
@@ -395,7 +395,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
             </div>
          </div>
 
-         <div className="mt-4 overflow-hidden rounded-md border border-border">
+         <div className="mt-3 overflow-hidden rounded-md border border-border">
             <Table>
                <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
