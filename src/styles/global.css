@@ -183,7 +183,7 @@
 
    .entry-prose ul,
    .entry-prose ol {
-      @apply mt-6 list-outside pl-6;
+      @apply mt-6 list-outside pl-8;
    }
 
    .entry-prose ul {
