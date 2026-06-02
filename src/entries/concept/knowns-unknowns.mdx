@@ -1,0 +1,36 @@
+import { Table, TableBody, TableCell, TableRow } from "../../components/ui/table";
+
+<div className="overflow-hidden rounded-md border">
+   <Table>
+      <TableBody className="[&_td+td]:border-l">
+         <TableRow>
+            <TableCell className="font-medium">Known-Knowns</TableCell>
+            <TableCell className="text-muted-foreground">
+               Things we're aware of and understand. <br />
+               <em>We know that we know.</em>
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-medium">Known-Unknowns</TableCell>
+            <TableCell className="text-muted-foreground">
+               Things we're aware of but don't understand. <br />
+               <em>We know we don't know.</em>
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-medium">Unknown-Knowns</TableCell>
+            <TableCell className="text-muted-foreground">
+               Things we understand but are not aware of. <br />
+               <em>We know but don't know it's relevant.</em>
+            </TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell className="font-medium">Unknown-Unknowns</TableCell>
+            <TableCell className="text-muted-foreground">
+               Things we're neither aware of nor understand. <br />
+               <em>We don't know what we don't know.</em>
+            </TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
