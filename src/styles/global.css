@@ -202,6 +202,30 @@
       @apply underline underline-offset-2 decoration-1 hover:text-emerald-600;
    }
 
+   .entry-prose sup a {
+      @apply px-0.5 text-sm no-underline;
+   }
+
+   .entry-prose .footnotes {
+      @apply mt-12 border-t border-border pt-6 text-sm leading-6 text-muted-foreground;
+   }
+
+   .entry-prose .footnotes ol {
+      @apply mt-0;
+   }
+
+   .entry-prose .footnotes li {
+      @apply scroll-mt-8;
+   }
+
+   .entry-prose .footnotes p {
+      @apply mt-0;
+   }
+
+   .entry-prose [data-footnote-backref] {
+      @apply ml-1 no-underline;
+   }
+
    .entry-prose hr {
       @apply my-12 border-t border-border;
    }
