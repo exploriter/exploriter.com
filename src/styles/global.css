@@ -202,7 +202,11 @@
       @apply my-12 border-t border-border;
    }
 
-   code {
+   .entry-prose mark {
+      @apply bg-[#FDFF3250];
+   }
+
+   .entry-prose code {
       @apply font-mono bg-mist-300/50 text-mist-900 px-1 py-0.5 rounded-xs not-italic;
    }
 }
