@@ -44,7 +44,7 @@ const sectionSwitcher = {
                )}
             </BreadcrumbTrail>
 
-            <header class="mt-10">
+            <header class="my-10 pb-10 border-b border-border">
                <div class="flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start">
                   <h1 class="-ml-0.5 flex-1 font-serif text-5xl leading-tight">{entry.title}</h1>
                   {entry.projectLink ? (
@@ -63,7 +63,7 @@ const sectionSwitcher = {
             </header>
 
             {EntryContent ? (
-               <div class="entry-prose mt-10 border-t border-border">
+               <div class="entry-prose">
                   <EntryContent />
                </div>
             ) : (
