@@ -177,6 +177,10 @@
       @apply mt-6;
    }
 
+   .entry-prose :is(td, th) > p:first-child {
+      @apply mt-0;
+   }
+
    .entry-prose ul,
    .entry-prose ol {
       @apply mt-6 list-outside pl-6;
