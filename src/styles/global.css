@@ -173,6 +173,10 @@
       @apply mt-12 -ml-0.5 font-serif text-3xl font-medium;
    }
 
+   .entry-prose h3 {
+      @apply mt-7 font-serif text-xl font-medium;
+   }
+
    .entry-prose p {
       @apply mt-6;
    }
