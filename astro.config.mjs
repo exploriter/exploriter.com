@@ -7,7 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
    output: "server",
-   integrations: [mdx(), react()],
+   integrations: [mdx({ smartypants: false }), react()],
    adapter: cloudflare({
       remoteBindings: true,
    }),
