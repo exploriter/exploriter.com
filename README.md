@@ -115,8 +115,6 @@ src/pages/concept/example.astro
 ```astro
 ---
 import EntryChromeLayout from "@/layouts/EntryChromeLayout.astro";
-
-export const prerender = false;
 ---
 
 <EntryChromeLayout>

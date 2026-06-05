@@ -2,8 +2,6 @@
 import EntryChromeLayout from "@/layouts/EntryChromeLayout.astro";
 import { loadEntryContent } from "@/lib/entry-content";
 
-export const prerender = false;
-
 const { slugSingular, entrySlug } = Astro.params;
 
 const EntryContent = slugSingular && entrySlug ? await loadEntryContent(slugSingular, entrySlug) : null;

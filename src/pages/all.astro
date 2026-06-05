@@ -4,8 +4,6 @@ import EntriesTable from "@/components/EntriesTable";
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import { listAllEntrySummaries, listFormationIntersectionSummaries } from "@/lib/exp3";
 
-export const prerender = false;
-
 const entries = await listAllEntrySummaries();
 const sections = await listFormationIntersectionSummaries();
 const sectionSwitcher = {

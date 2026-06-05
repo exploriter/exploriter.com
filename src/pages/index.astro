@@ -3,8 +3,6 @@ import SectionIcon from "@/components/icons/section-icon";
 import HeaderLayout from "@/layouts/HeaderLayout.astro";
 import { listFormationIntersectionSummaries } from "@/lib/exp3";
 
-export const prerender = false;
-
 const sections = await listFormationIntersectionSummaries();
 ---
 

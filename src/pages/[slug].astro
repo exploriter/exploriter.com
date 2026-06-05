@@ -11,8 +11,6 @@ import {
    listFormationIntersectionSummaries,
 } from "@/lib/exp3";
 
-export const prerender = false;
-
 const { slug } = Astro.params;
 
 const section = slug ? await getFormationIntersectionSummaryBySlug(slug) : null;
