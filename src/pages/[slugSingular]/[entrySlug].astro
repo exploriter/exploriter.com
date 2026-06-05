@@ -59,7 +59,7 @@ const sectionSwitcher = {
                      </a>
                   ) : null}
                </div>
-               <p class="mt-5 max-w-3xl font-serif text-xl leading-8 text-muted-foreground">{entry.description}</p>
+               {entry.description ? <p class="mt-5 max-w-3xl font-serif text-xl leading-8 text-muted-foreground">{entry.description}</p> : null}
             </header>
 
             {EntryContent ? (
@@ -67,7 +67,7 @@ const sectionSwitcher = {
                   <EntryContent />
                </div>
             ) : (
-               <section class="entry-prose mt-10 border-t border-border">
+               <section class="entry-prose">
                   <p class="text-sm border border-notice/33 bg-notice/5 px-4 py-3 rounded text-notice">
                      This entry exists in the <code>EXP3</code> database. A full page is pending migration/publication. Check back soon!
                   </p>
