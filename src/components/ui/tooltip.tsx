@@ -1,4 +1,5 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+
 import { cn } from "@/lib/css";
 
 function TooltipProvider({ delay = 300, ...props }: TooltipPrimitive.Provider.Props) {
@@ -24,44 +25,20 @@ function TooltipContent({
 }: TooltipPrimitive.Popup.Props & Pick<TooltipPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) {
    return (
       <TooltipPrimitive.Portal>
-         <TooltipPrimitive.Positioner
-            align={align}
-            alignOffset={alignOffset}
-            side={side}
-            sideOffset={sideOffset}
-            className="h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top, right, left, bottom, transform] duration-250 ease-in-out"
-         >
+         <TooltipPrimitive.Positioner align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset} className="isolate z-50">
             <TooltipPrimitive.Popup
                data-slot="tooltip-content"
                className={cn(
-                  "relative h-(--popup-height,auto) w-(--popup-width,auto) max-w-xs origin-(--transform-origin) rounded-xs bg-neutral-950 dark:bg-neutral-300 text-sm text-neutral-100 dark:text-neutral-900 font-sans transition-[width, height, opacity, scale] shadow outline outline-white dark:outline-neutral-200 duration-250 ease-[cubic-bezier(0.54,1.5,0.38,1.11)] data-ending-style:ease-in-out data-ending-style:opacity-0 data-ending-style:scale-85 data-starting-style:opacity-0 data-starting-style:scale-85",
+                  "z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-sm bg-foreground px-3 py-2 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
                   className
                )}
                {...props}
             >
-               <TooltipPrimitive.Arrow className="flex data-[side=bottom]:-top-2 data-[side=bottom]:rotate-0 data-[side=left]:-right-3.25 data-[side=left]:rotate-90 data-[side=right]:-left-3.25 data-[side=right]:-rotate-90 data-[side=top]:-bottom-2 data-[side=top]:rotate-180">
-                  <TooltipArrow />
-               </TooltipPrimitive.Arrow>
-               <TooltipPrimitive.Viewport className="relative h-full w-full overflow-clip px-2.25 py-0.75">{children}</TooltipPrimitive.Viewport>
+               {children}
+               <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-xs bg-foreground fill-foreground data-[side=bottom]:top-1 data-[side=inline-end]:top-1/2! data-[side=inline-end]:-left-1 data-[side=inline-end]:-translate-y-1/2 data-[side=inline-start]:top-1/2! data-[side=inline-start]:-right-1 data-[side=inline-start]:-translate-y-1/2 data-[side=left]:top-1/2! data-[side=left]:-right-1 data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2! data-[side=right]:-left-1 data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5" />
             </TooltipPrimitive.Popup>
          </TooltipPrimitive.Positioner>
       </TooltipPrimitive.Portal>
-   );
-}
-
-function TooltipArrow(props: React.ComponentProps<"svg">) {
-   return (
-      <svg width="20" height="10" viewBox="0 0 20 10" fill="none" {...props}>
-         <path
-            d="M9.66437 2.60207L4.80758 6.97318C4.07308 7.63423 3.11989 8 2.13172 8H0V10H20V8H18.5349C17.5468 8 16.5936 7.63423 15.8591 6.97318L11.0023 2.60207C10.622 2.2598 10.0447 2.25979 9.66437 2.60207Z"
-            className="fill-neutral-950 dark:fill-neutral-300"
-         />
-         <path
-            d="M8.99542 1.85876C9.75604 1.17425 10.9106 1.17422 11.6713 1.85878L16.5281 6.22989C17.0789 6.72568 17.7938 7.00001 18.5349 7.00001L15.89 7L11.0023 2.60207C10.622 2.2598 10.0447 2.2598 9.66436 2.60207L4.77734 7L2.13171 7.00001C2.87284 7.00001 3.58774 6.72568 4.13861 6.22989L8.99542 1.85876Z"
-            className="fill-white dark:fill-neutral-200"
-         />
-         <path d="M10.3333 3.34539L5.47654 7.71648C4.55842 8.54279 3.36693 9 2.13172 9H0V8H2.13172C3.11989 8 4.07308 7.63423 4.80758 6.97318L9.66437 2.60207C10.0447 2.25979 10.622 2.2598 11.0023 2.60207L15.8591 6.97318C16.5936 7.63423 17.5468 8 18.5349 8H20V9H18.5349C17.2998 9 16.1083 8.54278 15.1901 7.71648L10.3333 3.34539Z" />
-      </svg>
    );
 }
 
