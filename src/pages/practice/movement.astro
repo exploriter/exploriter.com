@@ -1,0 +1,16 @@
+---
+import ExerciseMovementsTable from "@/components/ExerciseMovementsTable";
+import EntryChromeLayout from "@/layouts/EntryChromeLayout.astro";
+import { listExerciseMovementTableData } from "@/lib/exp3";
+
+const movements = await listExerciseMovementTableData();
+---
+
+<EntryChromeLayout containerClass="max-w-6xl">
+   <div class="space-y-6">
+      <div class="entry-prose">
+         <h2>All Movements / Exercises</h2>
+         <ExerciseMovementsTable movements={movements} client:load />
+      </div>
+   </div>
+</EntryChromeLayout>

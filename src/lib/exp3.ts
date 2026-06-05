@@ -40,6 +40,26 @@ export type EntryWithFormationIntersection = EntrySummary & {
    };
 };
 
+export type ExerciseTaxonomyItem = {
+   id: string;
+   name: string;
+   description: string;
+};
+
+export type ExerciseMovementSummary = {
+   id: string;
+   name: string;
+   description: string;
+   roles: string[];
+   patterns: ExerciseTaxonomyItem[];
+   muscleGroups: ExerciseTaxonomyItem[];
+   implements: ExerciseTaxonomyItem[];
+   adaptations: ExerciseTaxonomyItem[];
+   spatialOrientations: ExerciseTaxonomyItem[];
+   contractionTypes: ExerciseTaxonomyItem[];
+   lateralPlanes: ExerciseTaxonomyItem[];
+};
+
 type FormationIntersectionSummaryRow = {
    slug: string;
    slug_singular: string;
@@ -90,6 +110,20 @@ type EntryWithFormationIntersectionRow = EntrySummaryRow & {
    formation_intersection_sort_order: number;
 };
 
+type ExerciseMovementSummaryRow = {
+   id: string;
+   name: string;
+   description: string;
+   session_role: string;
+   patterns: string;
+   muscle_groups: string;
+   implements: string;
+   adaptations: string;
+   spatial_orientations: string;
+   contraction_types: string;
+   lateral_planes: string;
+};
+
 const mapFormationIntersectionSummary = (row: FormationIntersectionSummaryRow): FormationIntersectionSummary => ({
    slug: row.slug,
    slugSingular: row.slug_singular,
@@ -130,6 +164,29 @@ const mapEntryWithFormationIntersection = (row: EntryWithFormationIntersectionRo
       nameSingular: row.formation_intersection_name_singular,
       sortOrder: row.formation_intersection_sort_order,
    },
+});
+
+const parseJsonArray = <T>(value: string): T[] => {
+   try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? (parsed as T[]) : [];
+   } catch {
+      return [];
+   }
+};
+
+const mapExerciseMovementSummary = (row: ExerciseMovementSummaryRow): ExerciseMovementSummary => ({
+   id: row.id,
+   name: row.name,
+   description: row.description,
+   roles: parseJsonArray<string>(row.session_role),
+   patterns: parseJsonArray<ExerciseTaxonomyItem>(row.patterns),
+   muscleGroups: parseJsonArray<ExerciseTaxonomyItem>(row.muscle_groups),
+   implements: parseJsonArray<ExerciseTaxonomyItem>(row.implements),
+   adaptations: parseJsonArray<ExerciseTaxonomyItem>(row.adaptations),
+   spatialOrientations: parseJsonArray<ExerciseTaxonomyItem>(row.spatial_orientations),
+   contractionTypes: parseJsonArray<ExerciseTaxonomyItem>(row.contraction_types),
+   lateralPlanes: parseJsonArray<ExerciseTaxonomyItem>(row.lateral_planes),
 });
 
 export const listFormationIntersectionSummaries = async () => {
@@ -262,4 +319,111 @@ export const getEntryPageBySlugs = async (slugSingular: string, entrySlug: strin
          nameSingular: row.formation_intersection_name_singular,
       },
    };
+};
+
+export const listExerciseMovementTableData = async () => {
+   const result = await env.EXP3DB.prepare(
+      `
+      SELECT
+         exercise_movements.id,
+         exercise_movements.name,
+         exercise_movements.description,
+         exercise_movements.session_role,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_movement_patterns.id, exercise_movement_patterns.name, exercise_movement_patterns.description
+                  FROM exercise_movement_pattern_assignments
+                  JOIN exercise_movement_patterns ON exercise_movement_patterns.id = exercise_movement_pattern_assignments.pattern_id
+                  WHERE exercise_movement_pattern_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_movement_patterns.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS patterns,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_muscle_groups.id, exercise_muscle_groups.name, exercise_muscle_groups.description
+                  FROM exercise_movement_muscle_group_assignments
+                  JOIN exercise_muscle_groups ON exercise_muscle_groups.id = exercise_movement_muscle_group_assignments.muscle_group_id
+                  WHERE exercise_movement_muscle_group_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_muscle_groups.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS muscle_groups,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_implements.id, exercise_implements.name, exercise_implements.description
+                  FROM exercise_movement_implement_assignments
+                  JOIN exercise_implements ON exercise_implements.id = exercise_movement_implement_assignments.implement_id
+                  WHERE exercise_movement_implement_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_implements.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS implements,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_adaptations.id, exercise_adaptations.name, exercise_adaptations.description
+                  FROM exercise_movement_adaptation_assignments
+                  JOIN exercise_adaptations ON exercise_adaptations.id = exercise_movement_adaptation_assignments.adaptation_id
+                  WHERE exercise_movement_adaptation_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_adaptations.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS adaptations,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_spatial_orientations.id, exercise_spatial_orientations.name, exercise_spatial_orientations.description
+                  FROM exercise_movement_spatial_orientation_assignments
+                  JOIN exercise_spatial_orientations ON exercise_spatial_orientations.id = exercise_movement_spatial_orientation_assignments.spatial_orientation_id
+                  WHERE exercise_movement_spatial_orientation_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_spatial_orientations.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS spatial_orientations,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_contraction_types.id, exercise_contraction_types.name, exercise_contraction_types.description
+                  FROM exercise_movement_contraction_type_assignments
+                  JOIN exercise_contraction_types ON exercise_contraction_types.id = exercise_movement_contraction_type_assignments.contraction_type_id
+                  WHERE exercise_movement_contraction_type_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_contraction_types.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS contraction_types,
+         COALESCE(
+            (
+               SELECT json_group_array(json_object('id', item.id, 'name', item.name, 'description', item.description))
+               FROM (
+                  SELECT exercise_lateralities.id, exercise_lateralities.name, exercise_lateralities.description
+                  FROM exercise_movement_laterality_assignments
+                  JOIN exercise_lateralities ON exercise_lateralities.id = exercise_movement_laterality_assignments.laterality_id
+                  WHERE exercise_movement_laterality_assignments.movement_id = exercise_movements.id
+                  ORDER BY exercise_lateralities.name COLLATE NOCASE ASC
+               ) item
+            ),
+            '[]'
+         ) AS lateral_planes
+      FROM exercise_movements
+      ORDER BY exercise_movements.name COLLATE NOCASE ASC, exercise_movements.id ASC
+      `
+   ).all<ExerciseMovementSummaryRow>();
+
+   return (result.results ?? []).map(mapExerciseMovementSummary);
 };
