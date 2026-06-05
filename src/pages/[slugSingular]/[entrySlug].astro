@@ -1,81 +1,24 @@
 ---
-import HeaderLayout from "@/layouts/HeaderLayout.astro";
-import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
-import NotFoundPage from "@/components/NotFoundPage.astro";
-import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/css";
+import EntryChromeLayout from "@/layouts/EntryChromeLayout.astro";
 import { loadEntryContent } from "@/lib/entry-content";
-import { getEntryPageBySlugs, listFormationIntersectionSummaries } from "@/lib/exp3";
-import { ArrowUpRightIcon } from "@phosphor-icons/react";
 
 export const prerender = false;
 
 const { slugSingular, entrySlug } = Astro.params;
 
-const entry = slugSingular && entrySlug ? await getEntryPageBySlugs(slugSingular, entrySlug) : null;
-
-if (!entry) {
-   Astro.response.status = 404;
-}
-
-const section = entry?.formationIntersection;
-const EntryContent = entry && slugSingular && entrySlug ? await loadEntryContent(slugSingular, entrySlug) : null;
-const sections = entry ? await listFormationIntersectionSummaries() : [];
-const sectionSwitcher = {
-   label: "Select section",
-   options: [{ label: "All Entries", href: "/all" }, ...sections.map((section) => ({ label: section.name, href: `/${section.slug}` }))],
-   value: `/${section?.slug ?? ""}`,
-};
+const EntryContent = slugSingular && entrySlug ? await loadEntryContent(slugSingular, entrySlug) : null;
 ---
 
-<HeaderLayout
-   title={entry ? `${entry.title} — Exploriter` : "Page Not Found — Exploriter"}
-   description={entry?.description ?? "The requested page could not be found."}
->
-   {
-      entry && section ? (
-         <article class="mx-auto max-w-4xl px-4 pb-20">
-            <BreadcrumbTrail items={[{ label: section.name, href: `/${section.slug}`, sectionSwitcher }, { label: entry.title }]}>
-               {slugSingular === "concept" ? (
-                  <ConceptKindIcon conceptKind={entry.conceptKind ?? "INDIVIDUAL"} className="size-4" client:only="react" />
-               ) : (
-                  <SectionIcon slug={section.slug} label={section.nameSingular} className="size-4" client:only="react" />
-               )}
-            </BreadcrumbTrail>
-
-            <header class="my-10 pb-10 border-b border-border">
-               <div class="flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start">
-                  <h1 class="-ml-0.5 flex-1 font-serif text-5xl leading-tight">{entry.title}</h1>
-                  {entry.projectLink ? (
-                     <a
-                        class={cn(buttonVariants({ variant: "outline", size: "default" }), "sm:ml-auto sm:mt-2")}
-                        href={entry.projectLink}
-                        rel="noreferrer"
-                        target="_blank"
-                     >
-                        Visit
-                        <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
-                     </a>
-                  ) : null}
-               </div>
-               {entry.description ? <p class="mt-5 max-w-3xl font-serif text-xl leading-8 text-muted-foreground">{entry.description}</p> : null}
-            </header>
-
-            {EntryContent ? (
-               <div class="entry-prose">
-                  <EntryContent />
-               </div>
-            ) : (
-               <section class="entry-prose">
-                  <p class="text-sm border border-notice/33 bg-notice/5 px-4 py-3 rounded text-notice">
-                     This entry exists in the <code>EXP3</code> database. A full page is pending migration/publication. Check back soon!
-                  </p>
-               </section>
-            )}
-         </article>
-      ) : (
-         <NotFoundPage path={Astro.url.pathname} />
-      )
-   }
-</HeaderLayout>
+<EntryChromeLayout showEntryHeader>
+   {EntryContent ? (
+      <div class="entry-prose">
+         <EntryContent />
+      </div>
+   ) : (
+      <section class="entry-prose">
+         <p class="text-sm border border-notice/33 bg-notice/5 px-4 py-3 rounded text-notice">
+            This entry exists in the <code>EXP3</code> database. A full page is pending migration/publication. Check back soon!
+         </p>
+      </section>
+   )}
+</EntryChromeLayout>

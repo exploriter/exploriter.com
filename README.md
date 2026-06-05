@@ -22,7 +22,7 @@ The app is bound to the existing EXP3 D1 database in [wrangler.jsonc](./wrangler
    "binding": "EXP3DB",
    "database_name": "exp3",
    "database_id": "8c2ee32b-653f-4f44-9f8f-c5f0808af683",
-   "remote": true
+   "remote": true,
 }
 ```
 
@@ -110,9 +110,31 @@ Steps:
 src/pages/concept/example.astro
 ```
 
-3. Query D1 directly from that `.astro` page as needed.
-4. Import React/TS components directly into the `.astro` page.
-5. Hydrate interactive components with Astro client directives such as `client:load`, `client:idle`, or `client:visible`.
+3. Wrap the page in the shared entry chrome layout:
+
+```astro
+---
+import EntryChromeLayout from "@/layouts/EntryChromeLayout.astro";
+
+export const prerender = false;
+---
+
+<EntryChromeLayout>
+   <!-- Custom entry content goes here. -->
+</EntryChromeLayout>
+```
+
+`EntryChromeLayout` derives the entry from the current URL, renders the shared site header and entry breadcrumbs, and handles the not-found state. Use `containerClass` when a custom entry needs different page width or spacing:
+
+```astro
+<EntryChromeLayout containerClass="max-w-6xl">
+   <!-- Custom entry content goes here. -->
+</EntryChromeLayout>
+```
+
+4. Query D1 directly from that `.astro` page as needed for custom content beyond the shared entry chrome.
+5. Import React/TS components directly into the `.astro` page.
+6. Hydrate interactive components with Astro client directives such as `client:load`, `client:idle`, or `client:visible`.
 
 Specific Astro routes take priority over the generic dynamic route. If both files exist:
 
