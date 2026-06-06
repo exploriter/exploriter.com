@@ -185,9 +185,14 @@
       @apply mt-0;
    }
 
+   .entry-prose > ul,
+   .entry-prose > ol {
+      @apply mt-6;
+   }
+
    .entry-prose ul,
    .entry-prose ol {
-      @apply mt-6 list-outside pl-8;
+      @apply list-outside pl-8;
    }
 
    .entry-prose ul {
