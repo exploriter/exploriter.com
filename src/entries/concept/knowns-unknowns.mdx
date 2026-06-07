@@ -4,28 +4,36 @@ import { Table, TableBody, TableCell, TableRow } from "../../components/ui/table
    <Table className="[&_td]:whitespace-normal [&_td:first-child]:font-medium [&_td:last-child]:text-muted-foreground [&_tr>*+*]:border-l">
       <TableBody>
          <TableRow>
-            <TableCell>Known-Knowns</TableCell>
+            <TableCell>
+               <mark>Known-Knowns</mark>
+            </TableCell>
             <TableCell>
                Things we're aware of and understand. <br />
                <em>We know that we know.</em>
             </TableCell>
          </TableRow>
          <TableRow>
-            <TableCell>Known-Unknowns</TableCell>
+            <TableCell>
+               <mark>Known-Unknowns</mark>
+            </TableCell>
             <TableCell>
                Things we're aware of but don't understand. <br />
                <em>We know we don't know.</em>
             </TableCell>
          </TableRow>
          <TableRow>
-            <TableCell>Unknown-Knowns</TableCell>
+            <TableCell>
+               <mark>Unknown-Knowns</mark>
+            </TableCell>
             <TableCell>
                Things we understand but are not aware of. <br />
                <em>We know but don't know it's relevant.</em>
             </TableCell>
          </TableRow>
          <TableRow>
-            <TableCell>Unknown-Unknowns</TableCell>
+            <TableCell>
+               <mark>Unknown-Unknowns</mark>
+            </TableCell>
             <TableCell>
                Things we're neither aware of nor understand. <br />
                <em>We don't know what we don't know.</em>
