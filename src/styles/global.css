@@ -150,100 +150,95 @@
 @layer components {
    .entry-prose {
       @apply text-base leading-7 sm:text-lg sm:leading-8 text-foreground;
+
+      :is(p, ul, ol) em {
+         @apply font-serif;
+      }
+
+      :is(p, ul, ol) strong {
+         @apply font-semibold;
+      }
+
+      > h2 {
+         @apply mt-12 -ml-0.5 font-serif text-3xl font-medium;
+      }
+
+      > h3 {
+         @apply mt-7 font-serif text-xl font-medium;
+      }
+
+      p,
+      > :is(ul, ol) {
+         @apply mt-6;
+      }
+
+      :is(td, th) > p:first-child {
+         @apply mt-0;
+      }
+
+      :is(ul, ol) {
+         @apply list-outside pl-8;
+      }
+
+      ul {
+         @apply list-disc;
+      }
+
+      ol {
+         @apply list-decimal;
+      }
+
+      :is(ul, ol) :is(ul, ol) {
+         @apply marker:text-muted-foreground;
+      }
+
+      ol ol {
+         @apply list-[lower-roman];
+      }
+
+      li {
+         @apply mt-2;
+      }
+
+      a {
+         @apply underline underline-offset-2 decoration-1 hover:text-emerald-600;
+      }
+
+      sup a {
+         @apply px-0.5 text-sm no-underline;
+      }
+
+      .footnotes {
+         @apply mt-12 border-t border-border pt-6 text-sm leading-6 text-muted-foreground;
+
+         :is(ol, p) {
+            @apply mt-0;
+         }
+
+         li {
+            @apply scroll-mt-8;
+         }
+      }
+
+      [data-footnote-backref] {
+         @apply ml-1 no-underline;
+      }
+
+      hr {
+         @apply my-12 border-t border-border;
+      }
+
+      mark {
+         @apply bg-[#FDFF3250];
+      }
+
+      code {
+         @apply font-mono bg-mist-300/50 text-mist-900 px-1 py-0.5 rounded-xs not-italic;
+      }
    }
 
    .typewriter-cursor::after {
       content: "_";
       animation: var(--animate-blink);
-   }
-
-   .entry-prose p em,
-   .entry-prose ul em,
-   .entry-prose ol em {
-      @apply font-serif;
-   }
-
-   .entry-prose p strong,
-   .entry-prose ul strong,
-   .entry-prose ol strong {
-      @apply font-semibold;
-   }
-
-   .entry-prose > h2 {
-      @apply mt-12 -ml-0.5 font-serif text-3xl font-medium;
-   }
-
-   .entry-prose > h3 {
-      @apply mt-7 font-serif text-xl font-medium;
-   }
-
-   .entry-prose p {
-      @apply mt-6;
-   }
-
-   .entry-prose :is(td, th) > p:first-child {
-      @apply mt-0;
-   }
-
-   .entry-prose > ul,
-   .entry-prose > ol {
-      @apply mt-6;
-   }
-
-   .entry-prose ul,
-   .entry-prose ol {
-      @apply list-outside pl-8;
-   }
-
-   .entry-prose ul {
-      @apply list-disc;
-   }
-
-   .entry-prose ol {
-      @apply list-decimal;
-   }
-
-   .entry-prose li {
-      @apply mt-2;
-   }
-
-   .entry-prose a {
-      @apply underline underline-offset-2 decoration-1 hover:text-emerald-600;
-   }
-
-   .entry-prose sup a {
-      @apply px-0.5 text-sm no-underline;
-   }
-
-   .entry-prose .footnotes {
-      @apply mt-12 border-t border-border pt-6 text-sm leading-6 text-muted-foreground;
-   }
-
-   .entry-prose .footnotes ol {
-      @apply mt-0;
-   }
-
-   .entry-prose .footnotes li {
-      @apply scroll-mt-8;
-   }
-
-   .entry-prose .footnotes p {
-      @apply mt-0;
-   }
-
-   .entry-prose [data-footnote-backref] {
-      @apply ml-1 no-underline;
-   }
-
-   .entry-prose hr {
-      @apply my-12 border-t border-border;
-   }
-
-   .entry-prose mark {
-      @apply bg-[#FDFF3250];
-   }
-
-   .entry-prose code {
-      @apply font-mono bg-mist-300/50 text-mist-900 px-1 py-0.5 rounded-xs not-italic;
    }
 }
