@@ -151,11 +151,11 @@
    .entry-prose {
       @apply text-base leading-7 sm:text-lg sm:leading-8 text-foreground;
 
-      :is(p, ul, ol) em {
+      :is(p, ul, ol, td) em {
          @apply font-serif;
       }
 
-      :is(p, ul, ol) strong {
+      :is(p, ul, ol, td) strong {
          @apply font-semibold;
       }
 
