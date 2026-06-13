@@ -166,7 +166,7 @@ const getAriaSort = (direction: false | "asc" | "desc") => {
 
 function TaxonomyBadge({ item }: { item: ExerciseTaxonomyItem }) {
    return (
-      <Tooltip>
+      <Tooltip disableHoverablePopup>
          <TooltipTrigger render={<span />}>
             <Badge
                className="cursor-help border-border/80 bg-background text-muted-foreground hover:border-foreground/30 hover:text-foreground"
@@ -217,7 +217,7 @@ function FilterChip({
    if (!config.tooltips) return chip;
 
    return (
-      <Tooltip>
+      <Tooltip disableHoverablePopup>
          <TooltipTrigger render={<span />}>{chip}</TooltipTrigger>
          <TooltipContent className="max-w-80">
             <span className="flex flex-col gap-0.5">
