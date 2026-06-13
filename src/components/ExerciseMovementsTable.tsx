@@ -185,14 +185,6 @@ function TaxonomyBadge({ item }: { item: ExerciseTaxonomyItem }) {
    );
 }
 
-function RoleBadge({ role }: { role: string }) {
-   return (
-      <Badge className="border-dashed border-border/80 bg-muted/35 text-muted-foreground" variant="outline">
-         {formatRoleLabel(role)}
-      </Badge>
-   );
-}
-
 function FilterChip({
    config,
    isSelected,
@@ -250,9 +242,6 @@ function MovementClassifications({ movement }: { movement: ExerciseMovementSumma
 
    return (
       <div className="flex max-w-150 flex-wrap gap-1.5">
-         {movement.roles.map((role) => (
-            <RoleBadge key={role} role={role} />
-         ))}
          {taxonomyItems.map((item) => (
             <TaxonomyBadge item={item} key={item.id} />
          ))}
