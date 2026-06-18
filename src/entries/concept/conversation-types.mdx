@@ -1,0 +1,122 @@
+import { Image } from "astro:assets";
+import { CheckCircleIcon } from "@phosphor-icons/react/ssr";
+import { XCircleIcon } from "@phosphor-icons/react/ssr";
+import Conversations from "./conversations.png";
+import ConversationsAlt from "./conversations-alt.png";
+import ConversationFailures from "./conversation-failures.png";
+import ConversationsFailuresAlt from "./conversation-failures-alt.png";
+import { Table, TableBody, TableHeader, TableHead, TableCell, TableRow } from "../../components/ui/table";
+
+<h2 id="healthy-types" className="flex items-center gap-2">
+   <CheckCircleIcon className="size-7 text-success" />
+   <span>Healthy Types</span>
+</h2>
+
+<div class="sm:flex gap-2 [&_img]:sm:w-1/2 [&_img]:min-w-0 my-6">
+   <Image src={Conversations} alt="Conversation Types" />
+   <Image src={ConversationsAlt} alt="Conversation Types with Failure Modes" class="hidden sm:block" />
+</div>
+
+<div className="overflow-hidden rounded-md border">
+   <Table className="min-w-2xl [&_tbody_td:not(:first-child)]:text-muted-foreground [&_tbody_td:first-child]:font-medium [&_tbody_td]:align-top [&_td]:whitespace-normal [&_tr>*+*]:border-l">
+      <TableHeader>
+         <TableRow>
+            <TableHead></TableHead>
+            <TableHead>Structure</TableHead>
+            <TableHead>Style</TableHead>
+            <TableHead>Goal</TableHead>
+         </TableRow>
+      </TableHeader>
+      <TableBody>
+         <TableRow>
+            <TableCell>
+               <mark>Dialogue</mark>
+            </TableCell>
+            <TableCell>2-way, cooperative (win-win).</TableCell>
+            <TableCell>Mutual listening with openness of mind and spirit.</TableCell>
+            <TableCell>Understanding and relationship-building.</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell>
+               <mark>Debate</mark>
+            </TableCell>
+            <TableCell>2-way, competitive (win-lose).</TableCell>
+            <TableCell>Argumentative engagement focused on finding flaws.</TableCell>
+            <TableCell>Persuasion and rhetorical victory.</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell>
+               <mark>Discourse</mark>
+            </TableCell>
+            <TableCell>1-way, cooperative.</TableCell>
+            <TableCell>Structured presentation aimed at clarity and coherence.</TableCell>
+            <TableCell>To inform, explain, or educate.</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell>
+               <mark>Diatribe</mark>
+            </TableCell>
+            <TableCell>1-way, competitive.</TableCell>
+            <TableCell>Emotionally charged expression, often attacking or rallying.</TableCell>
+            <TableCell>To provoke, intimidate, or inspire.</TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
+
+<h2 id="failure-modes" className="flex items-center gap-2">
+   <XCircleIcon className="size-7 text-destructive" />
+   <span>Failure Modes</span>
+</h2>
+
+<div class="sm:flex gap-2 [&_img]:sm:w-1/2 [&_img]:min-w-0 my-6">
+   <Image src={ConversationFailures} alt="Conversation Failure Modes" />
+   <Image src={ConversationsFailuresAlt} alt="Conversation Failure Modes with Healthy Types" class="hidden sm:block" />
+</div>
+
+<div className="overflow-hidden rounded-md border">
+   <Table className="min-w-2xl [&_tbody_td:not(:first-child)]:text-muted-foreground [&_tbody_td:first-child]:font-medium [&_tbody_td]:align-top [&_td]:whitespace-normal [&_tr>*+*]:border-l [&_tr>*:first-child]:max-w-28">
+      <TableHeader>
+         <TableRow>
+            <TableHead></TableHead>
+            <TableHead>Structure</TableHead>
+            <TableHead>Style</TableHead>
+            <TableHead>Goal</TableHead>
+         </TableRow>
+      </TableHeader>
+      <TableBody>
+         <TableRow>
+            <TableCell>
+               ~Dialogue~ → <mark>Manipulation</mark>
+            </TableCell>
+            <TableCell>1-way, reason-steering, covertly competitive.</TableCell>
+            <TableCell>Performatively polite, strategic, selectively responsive.</TableCell>
+            <TableCell>Steer judgment while preserving the appearance of choice.</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell>
+               ~Debate~ → <mark>Sophistry</mark>
+            </TableCell>
+            <TableCell>1-way, reason-dominating, overtly competitive.</TableCell>
+            <TableCell>Clever, adversarial, performative.</TableCell>
+            <TableCell>Win, dominate, or discredit rather than discover truth.</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell>
+               ~Discourse~ → <mark>Propaganda</mark>
+            </TableCell>
+            <TableCell>1-way, sense-shaping, covertly competitive.</TableCell>
+            <TableCell>Explanatory, authoritative, framing-heavy.</TableCell>
+            <TableCell>Fix interpretation by pre-structuring meaning, narrative control.</TableCell>
+         </TableRow>
+         <TableRow>
+            <TableCell>
+               ~Diatribe~ → <mark>Instigation</mark>
+            </TableCell>
+            <TableCell>1-way, sense-driving, overtly competitive.</TableCell>
+            <TableCell>Incendiary, moralized, emotionally charged.</TableCell>
+            <TableCell>Mobilize affect toward coordinated action.</TableCell>
+         </TableRow>
+      </TableBody>
+   </Table>
+</div>
