@@ -1,6 +1,7 @@
 ---
 import BreadcrumbTrail from "@/components/BreadcrumbTrail.astro";
 import NotFoundPage from "@/components/NotFoundPage.astro";
+import ProjectHereIcon from "@/components/ProjectHereIcon";
 import SectionIcon, { ConceptKindIcon } from "@/components/icons/section-icon";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/css";
@@ -23,6 +24,7 @@ if (!entry) {
 }
 
 const section = entry?.formationIntersection;
+const isSiteProjectPage = slugSingular === "project" && entrySlug === "exploriter";
 const sections = entry ? await listFormationIntersectionSummaries() : [];
 const sectionSwitcher = {
    label: "Select section",
@@ -48,11 +50,13 @@ const sectionSwitcher = {
 
             {showEntryHeader ? (
                <header class="my-10 pb-10 border-b border-border">
-                  <div class="flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-start">
+                  <div class="flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-center">
                      <h1 class="-ml-0.5 flex-1 font-serif text-5xl leading-tight">{entry.title}</h1>
-                     {entry.projectLink ? (
+                     {isSiteProjectPage ? (
+                        <ProjectHereIcon className="sm:ml-auto" client:only="react" />
+                     ) : entry.projectLink ? (
                         <a
-                           class={cn(buttonVariants({ variant: "outline", size: "default" }), "sm:ml-auto sm:mt-2")}
+                           class={cn(buttonVariants({ variant: "outline", size: "default" }), "sm:ml-auto")}
                            href={entry.projectLink}
                            rel="noreferrer"
                            target="_blank"
