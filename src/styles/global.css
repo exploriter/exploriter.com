@@ -162,7 +162,7 @@
       }
 
       > h2 {
-         @apply mt-12 -ml-0.5 font-serif text-3xl font-medium;
+         @apply mt-12 -ml-0.5 font-serif text-2xl sm:text-3xl font-medium;
       }
 
       > h3 {
