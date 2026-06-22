@@ -1,0 +1,75 @@
+---
+import EntryChromeLayout from "@/layouts/EntryChromeLayout.astro";
+import { Callout } from "../../components/Callout";
+import { RepeatIcon } from "@phosphor-icons/react";
+---
+
+<EntryChromeLayout showEntryHeader={true} containerClass="max-w-6xl">
+   <div class="entry-prose">
+      <Callout title="Notation Legend" className="float-right mt-0 mb-4 ml-4 font-mono hidden lg:block">
+         <p class="text-[13px] leading-5">
+            <strong>Class</strong><sup>c</sup> ≈ context (a general whole).<br />
+            <strong>Instance</strong><sup>i</sup> ≈ content (a specific part).
+         </p>
+         <ul class="list-none pl-0 mt-6 text-[13px] leading-4.5">
+            <li><strong>I<sup>c</sup></strong> = <i>class of the immanent</i></li>
+            <li><strong>I<sup>i</sup></strong> = <i>instance of the immanent</i></li>
+            <li><strong>O<sup>c</sup></strong> = <i>class of the omniscient</i></li>
+            <li><strong>O<sup>i</sup></strong> = <i>instance of the omniscient</i></li>
+            <li><strong>T<sup>c</sup></strong> = <i>class of the transcendent</i></li>
+            <li><strong>T<sup>i</sup></strong> = <i>instance of the transcendent</i></li>
+         </ul>
+      </Callout>
+      <h2 class="flex items-center gap-2">
+         <RepeatIcon weight="light" className="text-muted-foreground" />
+         <span>The Loop<sup><a href="#fn-axioms" id="fnref-axioms" aria-describedby="footnote-label">1</a></sup></span>
+      </h2>
+      <ol>
+         <li>
+            <mark>The <strong>Immanent</strong> <em>informs</em> the <strong>Omniscient</strong>...</mark>
+            <span class="text-muted-foreground font-mono pl-4 hidden sm:inline"
+               >I<sup>i</sup>
+               <span class="font-sans">⇒</span> I<sup>c</sup>
+               <span class="font-sans">→</span> O<sup>i</sup>
+               <span class="font-sans">⇒</span> O<sup>c</sup></span
+            >
+         </li>
+         <li>
+            <mark>The <strong>Omniscient</strong> <em>serves</em> the <strong>Transcendent</strong>...</mark><span
+               class="text-muted-foreground font-mono pl-4 hidden sm:inline"
+               >O<sup>i</sup>
+               <span class="font-sans">⇒</span> O<sup>c</sup>
+               <span class="font-sans">→</span> T<sup>i</sup>
+               <span class="font-sans">⇒</span> T<sup>c</sup></span
+            >
+         </li>
+         <li>
+            <mark>The <strong>Transcendent</strong> <em>orients to</em> the <strong>Immanent</strong>...</mark><span
+               class="text-muted-foreground font-mono pl-4 hidden sm:inline"
+               >T<sup>i</sup>
+               <span class="font-sans">⇒</span> T<sup>c</sup>
+               <span class="font-sans">→</span> I<sup>i</sup>
+               <span class="font-sans">⇒</span> I<sup>c</sup></span
+            >
+         </li>
+      </ol>
+      <p class="italic">
+         ...an instance of the immanent (which implies a class of the immanent), precedes an instance of the omniscient (which implies a class of the
+         omniscient), precedes an instance of the transcendent (which implies a class of the transcendent), precedes...
+      </p>
+      <section class="footnotes">
+         <h2 class="sr-only" id="footnote-label">Footnotes</h2>
+         <ol>
+            <li id="fn-axioms">
+               <p>
+                  Based on the <a href="/concept/idm-axioms">axioms of <em>An Immanent Metaphysics</em></a> by Forrest Landry. <a
+                     href="#fnref-axioms"
+                     aria-label="Back to reference 1"
+                     class="data-footnote-backref">↩</a
+                  >
+               </p>
+            </li>
+         </ol>
+      </section>
+   </div>
+</EntryChromeLayout>
