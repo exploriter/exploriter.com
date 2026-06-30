@@ -13,30 +13,30 @@
       "generate-types": "wrangler types"
    },
    "dependencies": {
-      "@astrojs/cloudflare": "^13.7.0",
-      "@astrojs/mdx": "^6.0.3",
-      "@astrojs/react": "^5.0.7",
-      "@base-ui/react": "^1.5.0",
+      "@astrojs/cloudflare": "^14.0.1",
+      "@astrojs/mdx": "^7.0.0",
+      "@astrojs/react": "^6.0.0",
+      "@base-ui/react": "^1.6.0",
       "@phosphor-icons/react": "^2.1.10",
       "@tailwindcss/vite": "^4.3.1",
       "@tanstack/react-table": "^8.21.3",
       "@types/react": "^19.2.17",
       "@types/react-dom": "^19.2.3",
-      "astro": "^6.4.8",
+      "astro": "^7.0.3",
       "class-variance-authority": "^0.7.1",
       "clsx": "^2.1.1",
       "react": "^19.2.7",
       "react-dom": "^19.2.7",
-      "shadcn": "^4.11.0",
+      "shadcn": "^4.12.0",
       "tailwind-merge": "^3.6.0",
       "tailwindcss": "^4.3.1",
       "tw-animate-css": "^1.4.0",
-      "wrangler": "^4.101.0"
+      "wrangler": "^4.105.0"
    },
    "devDependencies": {
       "@astrojs/check": "^0.9.9",
       "@astrojs/ts-plugin": "^1.10.9",
-      "prettier": "3.8.4",
+      "prettier": "3.9.3",
       "prettier-plugin-astro": "0.14.1",
       "typescript": "^6.0.3"
    },
