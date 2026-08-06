@@ -1,5 +1,5 @@
 import * as React from "react";
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
+import { flexRender, useTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
 import {
    CaretDownIcon,
    CaretUpDownIcon,
@@ -18,6 +18,7 @@ import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/css";
 import type { ConceptKind, EntrySummary, EntryWithFormationIntersection, ProjectStatus } from "@/lib/exp3";
+import { sortableTableFeatures } from "@/lib/tanstack-table";
 
 type EntriesTableProps = {
    entries: Array<EntrySummary | EntryWithFormationIntersection>;
@@ -251,8 +252,8 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
          }));
    }, [normalizedQuery, sectionSlugSingular, statusFilteredEntries]);
 
-   const columns = React.useMemo<ColumnDef<EntryTableRow>[]>(() => {
-      const sharedColumns: ColumnDef<EntryTableRow>[] = [
+   const columns = React.useMemo<ColumnDef<typeof sortableTableFeatures, EntryTableRow>[]>(() => {
+      const sharedColumns: ColumnDef<typeof sortableTableFeatures, EntryTableRow>[] = [
          {
             accessorKey: "searchScore",
             enableHiding: true,
@@ -271,7 +272,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
                  {
                     accessorKey: "projectDobSort",
                     header: ({ column }) => <SortHeader label="DOB-DOD" onClick={toggleProjectDobSort} sortDirection={column.getIsSorted()} />,
-                    sortingFn: (rowA, rowB) => {
+                    sortFn: (rowA, rowB) => {
                        const valueA = rowA.original.projectDobSort;
                        const valueB = rowB.original.projectDobSort;
 
@@ -282,11 +283,11 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
                        return valueA - valueB;
                     },
                     cell: ({ row }) => <span className="text-sm text-muted-foreground font-mono">{getProjectDateLabel(row.original)}</span>,
-                 } satisfies ColumnDef<EntryTableRow>,
+                 } satisfies ColumnDef<typeof sortableTableFeatures, EntryTableRow>,
                  {
                     accessorKey: "projectStatus",
                     header: ({ column }) => <SortHeader label="Status" onClick={toggleProjectStatusSort} sortDirection={column.getIsSorted()} />,
-                    sortingFn: (rowA, rowB) => {
+                    sortFn: (rowA, rowB) => {
                        const valueA = rowA.original.projectStatus;
                        const valueB = rowB.original.projectStatus;
 
@@ -297,7 +298,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
                        return projectStatusConfig[valueA].sortOrder - projectStatusConfig[valueB].sortOrder;
                     },
                     cell: ({ row }) => <ProjectStatusLabel status={row.original.projectStatus} />,
-                 } satisfies ColumnDef<EntryTableRow>,
+                 } satisfies ColumnDef<typeof sortableTableFeatures, EntryTableRow>,
               ]
             : []),
          {
@@ -314,7 +315,7 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
          {
             accessorKey: "iconSort",
             header: ({ column }) => <SortHeader label="Type" onClick={toggleTypeSort} sortDirection={column.getIsSorted()} />,
-            sortingFn: (rowA, rowB) => {
+            sortFn: (rowA, rowB) => {
                const valueA = rowA.original.iconSort;
                const valueB = rowB.original.iconSort;
                const rankA = getTypeSortPrimaryValue(rowA.original);
@@ -341,11 +342,10 @@ export default function EntriesTable({ entries, searchPlaceholder = "Search entr
       ];
    }, [isProjectsSection, showIconColumn, toggleProjectDobSort, toggleProjectStatusSort, toggleTitleSort, toggleTypeSort]);
 
-   const table = useReactTable({
+   const table = useTable({
       columns,
       data: filteredEntries,
-      getCoreRowModel: getCoreRowModel(),
-      getSortedRowModel: getSortedRowModel(),
+      features: sortableTableFeatures,
       onSortingChange: setSorting,
       state: {
          columnVisibility: {

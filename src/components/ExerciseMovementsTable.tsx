@@ -1,5 +1,5 @@
 import * as React from "react";
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
+import { flexRender, useTable, type ColumnDef, type SortingState } from "@tanstack/react-table";
 import { CaretDownIcon, CaretUpDownIcon, CaretUpIcon, FunnelSimpleIcon, MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/css";
 import type { ExerciseMovementSummary, ExerciseTaxonomyItem } from "@/lib/exp3";
+import { sortableTableFeatures } from "@/lib/tanstack-table";
 
 type ExerciseMovementsTableProps = {
    movements: ExerciseMovementSummary[];
@@ -359,7 +360,7 @@ export default function ExerciseMovementsTable({ movements }: ExerciseMovementsT
          .map(({ movement, score }) => ({ ...movement, searchScore: score }));
    }, [movements, normalizedQuery, selectedFilters]);
 
-   const columns = React.useMemo<ColumnDef<ExerciseMovementTableRow>[]>(
+   const columns = React.useMemo<ColumnDef<typeof sortableTableFeatures, ExerciseMovementTableRow>[]>(
       () => [
          {
             accessorKey: "searchScore",
@@ -368,7 +369,7 @@ export default function ExerciseMovementsTable({ movements }: ExerciseMovementsT
          {
             accessorKey: "name",
             header: ({ column }) => <SortHeader label="Name" onClick={toggleNameSort} sortDirection={column.getIsSorted()} />,
-            sortingFn: (rowA, rowB) => rowA.original.name.localeCompare(rowB.original.name),
+            sortFn: (rowA, rowB) => rowA.original.name.localeCompare(rowB.original.name),
             cell: ({ row }) => <span className="text-base font-medium">{row.original.name}</span>,
          },
          {
@@ -387,11 +388,10 @@ export default function ExerciseMovementsTable({ movements }: ExerciseMovementsT
       [toggleNameSort]
    );
 
-   const table = useReactTable({
+   const table = useTable({
       columns,
       data: filteredMovements,
-      getCoreRowModel: getCoreRowModel(),
-      getSortedRowModel: getSortedRowModel(),
+      features: sortableTableFeatures,
       onSortingChange: setSorting,
       state: {
          columnVisibility: {
